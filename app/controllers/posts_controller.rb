@@ -1,9 +1,32 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: %i[ show edit update destroy ]
+  before_action :require_login, only: [ :new, :create, :edit, :update, :destroy, :drafts, :publish, :unpublish ]
+  before_action :set_post, only: [ :show, :edit, :update, :destroy, :publish, :unpublish ]
+  before_action :authorize_owner!, only: [ :edit, :update, :destroy, :publish, :unpublish ]
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all
+    @posts = Post.published.order(published_at: :desc).page(params[:page]).per(10)
+  end
+
+  def drafts
+    @posts = current_user.posts.draft.order(updated_at: :desc).page(params[:page]).per(10)
+    render :index
+  end
+
+  def search
+    scope = Post.published
+    @posts = scope.search(params[:q]).order(published_at: :desc).page(params[:page]).per(10)
+    render :index
+  end
+
+  def publish
+    @post.update!(status: :published, published_at: Time.current)
+    redirect_to @post, notice: "Опубликовано"
+  end
+
+  def unpublish
+    @post.update!(status: :draft, published_at: nil)
+    redirect_to drafts_posts_path, notice: "Снова черновик"
   end
 
   # GET /posts/1 or /posts/1.json
@@ -59,9 +82,9 @@ class PostsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
+    def set_post = @post = Post.find(params[:id])
+
+    def authorize_owner!; head :forbidden unless @post.user_id == current_user.id; end
 
     # Only allow a list of trusted parameters through.
     def post_params

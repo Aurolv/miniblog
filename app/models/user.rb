@@ -5,5 +5,5 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
 
-  enum role: { reader: "reader", author: "author", admin: "admin" }
+  enum :role, { reader: "reader", author: "author", admin: "admin" }, default: :reader
 end
