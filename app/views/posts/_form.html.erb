@@ -1,42 +1,69 @@
-<%= form_with(model: post, class: "contents") do |form| %>
-  <% if post.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
-      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+<div class="max-w-3xl mx-auto">
+  <div class="rounded-2xl bg-white/70 backdrop-blur-sm shadow-xl ring-1 ring-slate-200 p-6 md:p-8">
 
-      <ul class="list-disc ml-6">
-        <% post.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 mb-6">
+      <%= @post.persisted? ? "Edit post" : "Create a new post" %>
+    </h1>
 
-  <div class="my-5">
-    <%= form.label :title %>
-    <%= form.text_field :title, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:title].none?, "border-red-400 focus:outline-red-600": post.errors[:title].any?}] %>
+    <%= form_with(model: @post, class: "space-y-6") do |form| %>
+      <% if @post.errors.any? %>
+        <div id="error_explanation"
+             class="rounded-xl border border-rose-200 bg-rose-50 text-rose-800 px-4 py-3 text-sm">
+          <h2 class="font-semibold mb-2">
+            <%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:
+          </h2>
+          <ul class="list-disc ml-5 space-y-1">
+            <% @post.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <!-- Title -->
+      <div>
+        <%= form.label :title, "Title", class: "block text-sm font-medium text-slate-700 mb-2" %>
+        <%= form.text_field :title,
+              class: [
+                "block w-full rounded-xl border px-3 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm",
+                "focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition",
+                (@post.errors[:title].any? ? "border-rose-300" : "border-slate-300")
+              ],
+              placeholder: "Amazing post title" %>
+      </div>
+
+      <!-- Body -->
+      <div>
+        <%= form.label :body, "Body", class: "block text-sm font-medium text-slate-700 mb-2" %>
+        <%= form.text_area :body, rows: 8,
+              class: [
+                "block w-full rounded-xl border px-3 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm",
+                "focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition",
+                (@post.errors[:body].any? ? "border-rose-300" : "border-slate-300")
+              ],
+              placeholder: "Write your story…" %>
+      </div>
+
+      <!-- Status -->
+      <div>
+        <%= form.label :status, "Status", class: "block text-sm font-medium text-slate-700 mb-2" %>
+        <%= form.select :status,
+              options_for_select([["Draft", "draft"], ["Published", "published"]], @post.status),
+              {},
+              class: "block w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 shadow-sm
+                      focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" %>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex flex-col sm:flex-row gap-3 pt-2">
+        <%= form.submit (@post.persisted? ? "Save changes" : "Create post"),
+              class: "inline-flex justify-center items-center rounded-xl bg-indigo-600 px-5 py-2.5 text-white
+                      font-semibold shadow-md hover:bg-indigo-700 active:scale-[.99] transition" %>
+
+        <%= link_to "Cancel", (@post.persisted? ? post_path(@post) : posts_path),
+              class: "inline-flex justify-center items-center rounded-xl border border-slate-300 bg-white/70
+                      px-5 py-2.5 text-slate-700 hover:bg-slate-50 transition" %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="my-5">
-    <%= form.label :body %>
-    <%= form.text_area :body, rows: 4, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:body].none?, "border-red-400 focus:outline-red-600": post.errors[:body].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :status %>
-    <%= form.text_field :status, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:status].none?, "border-red-400 focus:outline-red-600": post.errors[:status].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :published_at %>
-    <%= form.datetime_field :published_at, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:published_at].none?, "border-red-400 focus:outline-red-600": post.errors[:published_at].any?}] %>
-  </div>
-
-  <div class="my-5">
-    <%= form.label :user_id %>
-    <%= form.text_field :user_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": post.errors[:user_id].none?, "border-red-400 focus:outline-red-600": post.errors[:user_id].any?}] %>
-  </div>
-
-  <div class="inline">
-    <%= form.submit class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-  </div>
-<% end %>
+</div>

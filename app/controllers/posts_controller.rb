@@ -21,12 +21,12 @@ class PostsController < ApplicationController
 
   def publish
     @post.update!(status: :published, published_at: Time.current)
-    redirect_to @post, notice: "Опубликовано"
+    redirect_to @post, notice: "Published"
   end
 
   def unpublish
     @post.update!(status: :draft, published_at: nil)
-    redirect_to drafts_posts_path, notice: "Снова черновик"
+    redirect_to drafts_posts_path, notice: "Draft status returned"
   end
 
   # GET /posts/1 or /posts/1.json
@@ -44,29 +44,21 @@ class PostsController < ApplicationController
 
   # POST /posts or /posts.json
   def create
-    @post = Post.new(post_params)
+    @post = current_user.posts.new(post_params_with_publish_time)
 
-    respond_to do |format|
-      if @post.save
-        format.html { redirect_to @post, notice: "Post was successfully created." }
-        format.json { render :show, status: :created, location: @post }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    if @post.save
+      redirect_to @post, notice: "Post was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /posts/1 or /posts/1.json
   def update
-    respond_to do |format|
-      if @post.update(post_params)
-        format.html { redirect_to @post, notice: "Post was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @post }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
+    if @post.update(post_params_with_publish_time)
+      redirect_to @post, notice: "Post was successfully updated.", status: :see_other
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -88,6 +80,13 @@ class PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :body, :status, :published_at, :user_id)
+      params.require(:post).permit(:title, :body, :status)
+    end
+
+    def post_params_with_publish_time
+      attrs = post_params.to_h
+      attrs["status"] == "published"? attrs["published_at"] ||= Time.current : attrs["published_at"] = nil
+
+      attrs
     end
 end
