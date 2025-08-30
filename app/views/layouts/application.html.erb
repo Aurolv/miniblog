@@ -42,7 +42,6 @@
       </nav>
     </header>
 
-    <!-- Flash -->
     <div class="flash-container">
       <% flash.each do |k,v| %>
         <% classes = k.to_s == "notice" ? "flash-notice" : "flash-alert" %>
@@ -53,12 +52,10 @@
       <% end %>
     </div>
 
-    <!-- Main -->
     <main class="main-content">
       <%= yield %>
     </main>
 
-    <!-- Footer -->
     <footer class="site-footer">
       <div class="footer-container">
         <span>© <%= Time.current.year %> Miniblog</span>

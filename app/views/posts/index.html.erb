@@ -1,37 +1,43 @@
 <% content_for :title, "Posts" %>
 
-<div class="w-full rounded-2xl bg-white/70 shadow-lg backdrop-blur-sm p-6">
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="font-bold text-4xl text-slate-800">Posts</h1>
-    <%= link_to "New post", new_post_path, 
-          class: "rounded-lg px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-sm transition" %>
+<div class="posts-wrapper">
+  <div class="posts-header">
+    <h1 class="posts-title">Posts</h1>
+
+    <% if logged_in? %>
+      <%= link_to "New post", new_post_path, class: "btn-new-post" %>
+    <% end %>
   </div>
 
   <div id="posts" class="grid gap-6">
     <% if @posts.any? %>
       <% @posts.each do |post| %>
-        <div class="rounded-xl border border-slate-200 bg-white/80 shadow-sm hover:shadow-md transition p-6">
-          
-          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+        <div class="post-card">
+          <div class="post-card-inner">
             <div class="flex-1">
               <%= render post %>
             </div>
 
-            <div class="flex flex-wrap gap-2">
-              <%= link_to "Show", post, class: "rounded-lg px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-sm font-medium transition" %>
-              <%= link_to "Edit", edit_post_path(post), class: "rounded-lg px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-sm font-medium transition" %>
-              <%= button_to "Destroy", post, method: :delete, 
-                    class: "rounded-lg px-3 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-500 transition cursor-pointer", 
-                    data: { turbo_confirm: "Are you sure?" } %>
+            <div class="post-actions">
+              <%= link_to "Show", post, class: "btn-show" %>
+
+              <% can_manage = defined?(owns?) ? owns?(post) : (current_user && (post.user_id == current_user.id || current_user.admin?)) %>
+              <% if can_manage %>
+                <%= link_to "Edit", edit_post_path(post), class: "btn-edit" %>
+                <%= button_to "Destroy", post, method: :delete,
+                      class: "btn-destroy",
+                      data: { turbo_confirm: "Are you sure?" } %>
+              <% end %>
             </div>
           </div>
         </div>
       <% end %>
     <% else %>
-      <div class="flex flex-col items-center justify-center min-h-[50vh] text-slate-500">
+      <div class="posts-empty">
         <p class="text-lg font-medium">No posts found.</p>
-        <%= link_to "Create your first post", new_post_path, 
-              class: "mt-4 inline-flex items-center rounded-xl bg-indigo-600 px-5 py-2.5 text-white hover:bg-indigo-700 shadow transition" if logged_in? %>
+        <% if logged_in? %>
+          <%= link_to "Create your first post", new_post_path, class: "btn-first-post" %>
+        <% end %>
       </div>
     <% end %>
   </div>

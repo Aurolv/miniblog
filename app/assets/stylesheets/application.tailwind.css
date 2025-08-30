@@ -1,3 +1,5 @@
 @import "tailwindcss";
 
 @import "./layout.scss";
+@import "./posts.scss";
+@import "./users.scss";

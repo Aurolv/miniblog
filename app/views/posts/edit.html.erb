@@ -1,5 +1,7 @@
 <% content_for :title, "Editing post" %>
 
-<div class="w-full">
-  <%= render "form", post: @post %>
+<div class="post-edit-wrapper">
+  <div class="post-edit-card">
+    <%= render "form", post: @post %>
+  </div>
 </div>

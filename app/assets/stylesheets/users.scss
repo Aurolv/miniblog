@@ -1,0 +1,60 @@
+
+.user-form {
+  @apply contents;
+}
+
+.user-form-errors {
+  @apply bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3;
+}
+.user-form-errors h2 {
+  @apply font-semibold mb-2;
+}
+.user-form-errors ul {
+  @apply list-disc ml-6;
+}
+
+.user-form-group {
+  @apply my-5;
+}
+
+.user-input {
+  @apply block shadow-sm rounded-md border px-3 py-2 mt-2 w-full border-gray-400 focus:outline-blue-600;
+}
+
+.user-input-error {
+  @apply block shadow-sm rounded-md border px-3 py-2 mt-2 w-full border-red-400 focus:outline-red-600;
+}
+
+.user-submit {
+  @apply w-full sm:w-auto rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer;
+}
+
+.user-card {
+  @apply w-full sm:w-auto my-5 space-y-5;
+}
+
+.user-card-field {
+  @apply mb-3;
+}
+
+.user-card-label {
+  @apply block font-medium mb-1;
+}
+
+/* === User new page === */
+.user-new-wrapper {
+  @apply md:w-2/3 w-full mx-auto;
+}
+
+.user-new-card {
+  @apply rounded-2xl bg-white/70 backdrop-blur-sm shadow-xl ring-1 ring-slate-200 p-6 md:p-8;
+}
+
+.user-new-title {
+  @apply font-bold text-4xl mb-6;
+}
+
+.user-back-link {
+  @apply w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5
+         bg-gray-100 hover:bg-gray-50 inline-block font-medium;
+}

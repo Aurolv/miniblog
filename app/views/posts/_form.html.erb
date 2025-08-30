@@ -1,69 +1,41 @@
-<div class="max-w-3xl mx-auto">
-  <div class="rounded-2xl bg-white/70 backdrop-blur-sm shadow-xl ring-1 ring-slate-200 p-6 md:p-8">
+<%= form_with(model: @post, class: "post-form") do |form| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation" class="post-errors" role="alert">
+      <h2>
+        <%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:
+      </h2>
+      <ul>
+        <% @post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 mb-6">
-      <%= @post.persisted? ? "Edit post" : "Create a new post" %>
-    </h1>
-
-    <%= form_with(model: @post, class: "space-y-6") do |form| %>
-      <% if @post.errors.any? %>
-        <div id="error_explanation"
-             class="rounded-xl border border-rose-200 bg-rose-50 text-rose-800 px-4 py-3 text-sm">
-          <h2 class="font-semibold mb-2">
-            <%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:
-          </h2>
-          <ul class="list-disc ml-5 space-y-1">
-            <% @post.errors.each do |error| %>
-              <li><%= error.full_message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <!-- Title -->
-      <div>
-        <%= form.label :title, "Title", class: "block text-sm font-medium text-slate-700 mb-2" %>
-        <%= form.text_field :title,
-              class: [
-                "block w-full rounded-xl border px-3 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm",
-                "focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition",
-                (@post.errors[:title].any? ? "border-rose-300" : "border-slate-300")
-              ],
-              placeholder: "Amazing post title" %>
-      </div>
-
-      <!-- Body -->
-      <div>
-        <%= form.label :body, "Body", class: "block text-sm font-medium text-slate-700 mb-2" %>
-        <%= form.text_area :body, rows: 8,
-              class: [
-                "block w-full rounded-xl border px-3 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm",
-                "focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition",
-                (@post.errors[:body].any? ? "border-rose-300" : "border-slate-300")
-              ],
-              placeholder: "Write your story…" %>
-      </div>
-
-      <!-- Status -->
-      <div>
-        <%= form.label :status, "Status", class: "block text-sm font-medium text-slate-700 mb-2" %>
-        <%= form.select :status,
-              options_for_select([["Draft", "draft"], ["Published", "published"]], @post.status),
-              {},
-              class: "block w-full rounded-xl border border-slate-300 bg-white/80 px-3 py-2.5 text-slate-900 shadow-sm
-                      focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" %>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex flex-col sm:flex-row gap-3 pt-2">
-        <%= form.submit (@post.persisted? ? "Save changes" : "Create post"),
-              class: "inline-flex justify-center items-center rounded-xl bg-indigo-600 px-5 py-2.5 text-white
-                      font-semibold shadow-md hover:bg-indigo-700 active:scale-[.99] transition" %>
-
-        <%= link_to "Cancel", (@post.persisted? ? post_path(@post) : posts_path),
-              class: "inline-flex justify-center items-center rounded-xl border border-slate-300 bg-white/70
-                      px-5 py-2.5 text-slate-700 hover:bg-slate-50 transition" %>
-      </div>
-    <% end %>
+  <div class="post-field">
+    <%= form.label :title, "Title", class: "post-label" %>
+    <%= form.text_field :title,
+          class: ["post-input", ("post-input--error" if @post.errors[:title].any?)].compact,
+          placeholder: "Amazing post title" %>
   </div>
-</div>
+
+  <div class="post-field">
+    <%= form.label :body, "Body", class: "post-label" %>
+    <%= form.text_area :body, rows: 8,
+          class: ["post-textarea", ("post-textarea--error" if @post.errors[:body].any?)].compact,
+          placeholder: "Write your story…" %>
+  </div>
+
+  <div class="post-field">
+    <%= form.label :status, "Status", class: "post-label" %>
+    <%= form.select :status,
+          options_for_select([["Draft", "draft"], ["Published", "published"]], @post.status),
+          {},
+          class: "post-select" %>
+  </div>
+
+  <div class="post-actions">
+    <%= form.submit (@post.persisted? ? "Save changes" : "Create post"), class: "btn-primary" %>
+    <%= link_to "Cancel", (@post.persisted? ? post_path(@post) : posts_path), class: "btn-secondary" %>
+  </div>
+<% end %>
