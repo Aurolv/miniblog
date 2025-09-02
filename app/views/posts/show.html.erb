@@ -1,10 +1,6 @@
 <% content_for :title, @post.title %>
 
 <div class="post-show-wrapper">
-  <% if notice.present? %>
-    <div id="notice" class="post-notice"><%= notice %></div>
-  <% end %>
-
   <article class="post-article">
     <h1 class="post-title"><%= @post.title %></h1>
 
@@ -30,6 +26,8 @@
     </div>
 
     <div class="post-actions">
+      <%= render "likes/like_button", post: @post %>
+
       <% if current_user && (@post.user_id == current_user.id || current_user.admin?) %>
         <%= link_to edit_post_path(@post), class: "btn-outline" do %>
           <svg class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">

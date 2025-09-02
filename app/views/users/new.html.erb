@@ -1,11 +1,9 @@
-<% content_for :title, "New user" %>
+<% content_for :title, "Registraion" %>
 
 <div class="user-new-wrapper">
   <div class="user-new-card">
     <h1 class="user-new-title">Please follow registration</h1>
 
     <%= render "form", user: @user %>
-
-    <%= link_to "Back to users", users_path, class: "user-back-link" %>
   </div>
 </div>

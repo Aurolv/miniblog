@@ -18,7 +18,7 @@
 }
 
 .user-input {
-  @apply block shadow-sm rounded-md border px-3 py-2 mt-2 w-full border-gray-400 focus:outline-blue-600;
+  @apply block shadow-sm rounded-md bg-white/80 border border-gray-300 px-3 py-2 mt-2 w-full focus:outline-blue-600;
 }
 
 .user-input-error {
