@@ -61,5 +61,3 @@ end
 gem "kaminari"
 
 gem "sassc-rails"
-
-gem "cssbundling-rails", "~> 1.4"

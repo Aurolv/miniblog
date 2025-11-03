@@ -68,12 +68,12 @@
 .post-label { @apply block text-sm font-medium text-slate-700 mb-2; }
 
 .post-input {
-  @apply block borded-slate-300 bg-white/80 border w-full rounded-xl px-3 py-2.5 text-slate-900
+  @apply block border-slate-300 bg-white/80 border w-full rounded-xl px-3 py-2.5 text-slate-900
          placeholder-slate-400 shadow-sm
 }
 
 .post-textarea {
-  @apply block  borded-slate-300 bg-white/80 border w-full rounded-xl px-3 py-2.5 text-slate-900
+  @apply block  border-slate-300 bg-white/80 border w-full rounded-xl px-3 py-2.5 text-slate-900
          placeholder-slate-400 shadow-sm
 }
 
