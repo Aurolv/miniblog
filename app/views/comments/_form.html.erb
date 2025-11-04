@@ -1,0 +1,35 @@
+<% parent_id = comment.parent_id || comment.parent&.id %>
+<% is_reply = parent_id.present? %>
+<div class="comment-form-card <%= "comment-form-card--reply" if is_reply %>">
+  <h3 class="comment-form-title <%= "comment-form-title--reply" if is_reply %>">
+    <%= is_reply ? "Reply" : "Add a comment" %>
+  </h3>
+
+  <% if comment.errors.any? %>
+    <div class="comment-errors">
+      <h4><%= pluralize(comment.errors.count, "error") %> prevented this comment from being saved:</h4>
+      <ul>
+        <% comment.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: [ post, comment ], class: "comment-form" do |form| %>
+    <% if parent_id.present? %>
+      <%= form.hidden_field :parent_id, value: parent_id %>
+    <% end %>
+    <div class="comment-field">
+      <%= form.label :body, (is_reply ? "Share your reply" : "Share your thoughts"), class: "comment-label" %>
+      <%= form.text_area :body,
+            rows: (is_reply ? 3 : 4),
+            placeholder: "Write something meaningful...",
+            class: "comment-textarea#{' comment-textarea--error' if comment.errors[:body].present?}" %>
+    </div>
+
+    <div class="comment-form-actions <%= "comment-form-actions--reply" if is_reply %>">
+      <%= form.submit (is_reply ? "Reply" : "Post comment"), class: "btn-primary" %>
+    </div>
+  <% end %>
+</div>

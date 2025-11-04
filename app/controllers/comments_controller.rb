@@ -5,12 +5,14 @@ class CommentsController < ApplicationController
   before_action :authorize_owner!, only: :destroy
 
   def create
-    @comment = @post.comments.new(comment_params.merge(user: current_user))
+    @comment = @post.comments.new(comment_params.except(:parent_id).merge(user: current_user))
+    attach_parent!
 
     if @comment.save
       redirect_to @post, notice: "Comment was successfully created."
     else
-      redirect_to @post, alert: "Comment could not be saved.", status: :unprocessable_entity
+      prepare_comment_resources
+      render "posts/show", status: :unprocessable_entity
     end
   end
 
@@ -34,6 +36,27 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:body)
+    params.require(:comment).permit(:body, :parent_id)
+  end
+
+  def attach_parent!
+    parent_id = comment_params[:parent_id].presence
+    return unless parent_id
+
+    @reply_target = @post.comments.find_by(id: parent_id)
+    @comment.parent = @reply_target if @reply_target
+  end
+
+  def prepare_comment_resources
+    @comments = @post.comments.includes(:user, :likes, replies: [ :user, :likes ]).roots.order(created_at: :asc)
+    if @comment.parent
+      @reply_target ||= @comment.parent
+      @reply_comment = @comment
+      @new_comment = Comment.new
+    else
+      @new_comment = @comment
+    end
+    @reply_comment ||= Comment.new
+    @reply_comment.parent ||= @reply_target if @reply_target
   end
 end

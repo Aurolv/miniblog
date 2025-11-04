@@ -51,6 +51,8 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   test "should show post" do
     get post_url(@post)
     assert_response :success
+    assert_match "Discussion", response.body
+    assert_match comments(:one).body, response.body
   end
 
   test "should get edit" do

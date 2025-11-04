@@ -55,4 +55,34 @@
       <% end %>
     </div>
   </article>
+
+  <section id="comments" class="comments-section">
+    <div class="comments-header">
+      <div>
+        <h2 class="comments-title">Discussion</h2>
+        <p class="comments-subtitle">Join the conversation below</p>
+      </div>
+      <span class="comments-count"><%= pluralize(@post.comments.count, "comment").upcase %></span>
+    </div>
+
+    <div class="comments-list">
+      <% if @comments.any? %>
+        <%= render partial: "comments/comment", collection: @comments, as: :comment, locals: { post: @post, depth: 0 } %>
+      <% else %>
+        <p class="comments-empty">No comments yet. Be the first to share your thoughts!</p>
+      <% end %>
+    </div>
+
+    <div class="comments-form-wrapper">
+      <% if current_user %>
+        <%= render "comments/form", post: @post, comment: @new_comment %>
+      <% else %>
+        <div class="comments-login-callout">
+          <p>
+            <%= link_to "Log in", login_path, class: "comments-login-link" %> to join the conversation.
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </section>
 </div>

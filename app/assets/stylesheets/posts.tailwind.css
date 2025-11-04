@@ -1,0 +1,357 @@
+.posts-wrapper {
+  @apply w-full rounded-2xl bg-white/70 shadow-lg backdrop-blur-sm p-6;
+}
+
+.posts-header {
+  @apply flex justify-between items-center mb-8;
+}
+
+.posts-title {
+  @apply font-bold text-4xl text-slate-800;
+}
+
+.btn-new-post {
+  @apply rounded-lg px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-sm transition;
+}
+
+.post-card {
+  @apply rounded-xl border border-slate-200 bg-white/80 shadow-sm hover:shadow-md transition p-6;
+}
+
+.post-card-inner {
+  @apply flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4;
+}
+
+.post-actions {
+  @apply flex flex-wrap gap-2;
+}
+
+.btn-show {
+  @apply rounded-lg px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-sm font-medium transition;
+}
+
+.btn-edit {
+  @apply rounded-lg px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-sm font-medium transition;
+}
+
+.btn-destroy {
+  @apply rounded-lg px-3 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-500 transition cursor-pointer;
+}
+
+.posts-empty {
+  @apply flex flex-col items-center justify-center min-h-[50vh] text-slate-500;
+}
+
+.btn-first-post {
+  @apply mt-4 inline-flex items-center rounded-xl bg-indigo-600 px-5 py-2.5 text-white hover:bg-indigo-700 shadow transition;
+}
+
+.post-edit-wrapper {
+  @apply max-w-3xl mx-auto;
+}
+
+.post-edit-card {
+  @apply rounded-2xl bg-white/70 backdrop-blur-sm shadow-xl ring-1 ring-slate-200 p-6 md:p-8;
+}
+
+.post-form {
+  @apply space-y-6;
+}
+
+.post-errors {
+  @apply rounded-xl border border-rose-200 bg-rose-50 text-rose-800 px-4 py-3 text-sm;
+}
+.post-errors h2 { @apply font-semibold mb-2; }
+.post-errors ul { @apply list-disc ml-5 space-y-1; }
+
+.post-field { @apply mb-4; }
+.post-label { @apply block text-sm font-medium text-slate-700 mb-2; }
+
+.post-input {
+  @apply block border-slate-300 bg-white/80 border w-full rounded-xl px-3 py-2.5 text-slate-900
+         placeholder-slate-400 shadow-sm
+}
+
+.post-textarea {
+  @apply block  border-slate-300 bg-white/80 border w-full rounded-xl px-3 py-2.5 text-slate-900
+         placeholder-slate-400 shadow-sm
+}
+
+.post-textarea--error {
+  @apply border-rose-300;
+}
+
+.post-select {
+  @apply block w-full rounded-xl border border-slate-300 bg-white/80
+         px-3 py-2.5 text-slate-900 shadow-sm
+         focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition;
+}
+
+.post-show-wrapper { @apply max-w-3xl mx-auto; }
+
+.post-notice {
+  @apply mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 text-emerald-700 text-sm;
+}
+
+.post-article {
+  @apply rounded-2xl bg-white/80 backdrop-blur-sm shadow-md ring-1 ring-slate-200 p-6 md:p-8;
+}
+
+.post-title {
+  @apply text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-4;
+}
+
+.post-meta {
+  @apply flex items-center gap-3 text-sm text-slate-500 mb-6;
+}
+.post-author {
+  @apply flex items-center gap-2;
+}
+.post-avatar {
+  @apply h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-semibold;
+}
+.post-status {
+  @apply ml-auto px-2 py-0.5 rounded-full text-xs font-medium;
+}
+.post-status--published { @apply bg-emerald-100 text-emerald-700; }
+.post-status--draft     { @apply bg-slate-100 text-slate-600; }
+
+.post-body {
+  @apply text-slate-700 leading-relaxed mb-8;
+}
+
+
+.post-actions { @apply flex flex-wrap gap-3; }
+
+.btn-outline {
+  @apply inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white/70
+         px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition;
+}
+
+.btn-danger {
+  @apply inline-flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium
+         text-white hover:bg-rose-500 transition;
+}
+
+.btn-primary {
+  @apply inline-flex justify-center items-center rounded-xl bg-indigo-600 px-5 py-2.5 text-white
+         font-semibold shadow-md hover:bg-indigo-700 active:scale-[.99] transition;
+}
+
+.btn-secondary {
+  @apply inline-flex justify-center items-center rounded-xl border border-slate-300 bg-white/70
+         px-5 py-2.5 text-slate-700 hover:bg-slate-50 transition;
+}
+.comments-section {
+  @apply mt-12 rounded-[32px] bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)] ring-1 ring-slate-100/70 p-6 md:p-10 space-y-8;
+}
+
+.comments-header {
+  @apply flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-6;
+}
+
+.comments-title {
+  @apply text-3xl font-bold text-slate-900;
+}
+
+.comments-subtitle {
+  @apply text-sm font-medium text-slate-400;
+}
+
+.comments-count {
+  @apply inline-flex items-center justify-center rounded-full bg-indigo-600/15 px-4 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-indigo-600;
+}
+
+.comments-list {
+  @apply space-y-6;
+}
+
+.comments-empty {
+  @apply rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-8 text-center text-sm text-slate-500;
+}
+
+.comments-form-wrapper {
+  @apply pt-2;
+}
+
+.comments-login-callout {
+  @apply flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-600 md:flex-row md:items-center md:justify-between;
+}
+
+.comments-login-link {
+  @apply font-semibold text-indigo-600 hover:text-indigo-500 transition;
+}
+
+.comment-card {
+  @apply relative grid grid-cols-[3rem_1fr] items-start gap-5 rounded-[26px] border border-slate-200 bg-white px-6 py-6 shadow-[0_12px_34px_rgba(15,23,42,0.07)] transition hover:-translate-y-[2px] hover:shadow-[0_20px_48px_rgba(15,23,42,0.12)];
+}
+
+.comment-card::before {
+  content: "";
+  @apply absolute left-[1.5rem] top-0 h-3 w-3 rounded-full border border-slate-200 bg-white;
+}
+
+.comment-card--nested {
+  @apply mt-6 ml-10 md:ml-16 bg-white;
+}
+
+.comment-card--nested::before {
+  content: "";
+  position: absolute;
+  left: -2.5rem;
+  top: -1rem;
+  bottom: calc(100% - 1.25rem);
+  @apply border-l border-slate-200/80;
+}
+
+.comment-card--nested::after {
+  content: "";
+  position: absolute;
+  left: -2.5rem;
+  top: 1.25rem;
+  bottom: -1.5rem;
+  @apply border-l border-slate-200/60;
+}
+
+.comment-children {
+  @apply mt-4 space-y-6;
+}
+
+.comment-avatar {
+  @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-lg font-semibold text-indigo-700;
+}
+
+.comment-main {
+  @apply flex flex-col gap-4;
+}
+
+.comment-header {
+  @apply flex flex-wrap items-center justify-between gap-4;
+}
+
+.comment-meta {
+  @apply flex items-center gap-2 text-sm font-medium text-slate-500;
+}
+
+.comment-author {
+  @apply text-base font-semibold text-slate-800;
+}
+
+.comment-dot {
+  @apply h-1.5 w-1.5 rounded-full bg-slate-300;
+}
+
+.comment-meta {
+  @apply flex flex-wrap items-center gap-2 text-sm font-medium text-slate-400;
+}
+
+.comment-author {
+  @apply text-base font-semibold text-slate-800;
+}
+
+.comment-dot {
+  @apply h-1 w-1 rounded-full bg-slate-300;
+}
+
+.comment-timestamp {
+  @apply text-[0.65rem] font-semibold tracking-[0.28em] text-slate-400;
+}
+
+.comment-delete-button {
+  @apply inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white px-4 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-rose-500 transition hover:bg-rose-50 hover:text-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200;
+}
+
+.comment-body {
+  @apply text-sm leading-relaxed text-slate-700;
+
+  p {@apply mb-3;}
+  p:last-child {@apply mb-0;}
+}
+
+.comment-interactions {
+  @apply flex flex-wrap items-center gap-3 text-sm;
+}
+
+.comment-like-button {
+  @apply inline-flex items-center gap-1 rounded-full border border-slate-300 bg-white px-4 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-200;
+}
+
+.comment-like-button svg {
+  @apply transition;
+}
+
+.comment-like-button--active {
+  @apply border-rose-300 bg-rose-50 text-rose-600 hover:bg-rose-100 focus:ring-rose-200;
+}
+
+.comment-like-count {
+  @apply inline-flex items-center gap-1 text-xs font-medium text-slate-500;
+}
+
+.comment-reply {
+  @apply w-full md:w-auto;
+}
+
+.comment-reply summary::-webkit-details-marker {
+  display: none;
+}
+
+.comment-reply-toggle {
+  @apply cursor-pointer select-none text-xs font-semibold text-indigo-600 hover:text-indigo-500 transition;
+}
+
+.comment-reply-icon {
+  @apply mr-1 text-[0.6rem] align-middle;
+}
+
+.comment-reply[open] .comment-reply-toggle {
+  @apply text-indigo-500;
+}
+
+.comment-reply-body {@apply mt-3 md:mt-4;}
+
+.comment-form-card {
+  @apply rounded-2xl border border-slate-200 bg-slate-50 px-6 py-6 shadow-sm space-y-4;
+}
+
+.comment-form-card--reply {
+  @apply border-none bg-transparent px-0 py-0 shadow-none;
+}
+
+.comment-form-title {
+  @apply text-lg font-semibold text-slate-900;
+}
+
+.comment-form-title--reply {
+  @apply text-xs font-semibold uppercase tracking-[0.2em] text-slate-400;
+}
+
+.comment-errors {
+  @apply rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 space-y-2;
+}
+
+.comment-errors h4 {@apply font-semibold;}
+.comment-errors ul {@apply ml-5 list-disc space-y-1;}
+
+.comment-field {@apply flex flex-col gap-2;}
+
+.comment-label {@apply text-sm font-medium text-slate-700;}
+
+.comment-textarea {
+  @apply w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm text-slate-900 shadow-sm transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500;
+}
+
+.comment-textarea--error {@apply border-rose-300 focus:border-rose-400 focus:ring-rose-200;}
+
+.comment-form-actions {
+  @apply flex justify-end;
+}
+
+.comment-form-actions--reply {@apply justify-start;}
+.comment-card--root {
+  @apply mt-4 first:mt-0;
+}
+
+.comment-card--root::before {
+  @apply hidden;
+}

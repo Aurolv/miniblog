@@ -1,0 +1,66 @@
+<% depth = local_assigns.fetch(:depth, 0) %>
+<% wrapper_classes = [ "comment-card" ] %>
+<% wrapper_classes << (depth.zero? ? "comment-card--root" : "comment-card--nested") %>
+<% wrapper_classes << "comment-card--has-children" if comment.replies.any? %>
+
+<article id="<%= dom_id(comment) %>" class="<%= wrapper_classes.join(" ") %>">
+  <div class="comment-avatar">
+    <%= comment.user&.name&.first&.upcase || comment.user&.email&.first&.upcase || "U" %>
+  </div>
+
+  <div class="comment-main">
+    <header class="comment-header">
+      <div class="comment-meta">
+        <span class="comment-author">
+          <%= comment.user&.name.presence || comment.user&.email || "Anonymous" %>
+        </span>
+        <span class="comment-dot" aria-hidden="true"></span>
+        <%= time_tag comment.created_at, class: "comment-timestamp", title: l(comment.created_at, format: :long) do %>
+          <%= time_ago_in_words(comment.created_at) %> ago
+        <% end %>
+      </div>
+
+      <% if owns?(comment) %>
+        <%= button_to comment_path(comment),
+              method: :delete,
+              class: "comment-delete-button",
+              data: { turbo_confirm: "Are you sure you want to remove this comment?" } do %>
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+          Remove
+        <% end %>
+      <% end %>
+    </header>
+
+    <div class="comment-body">
+      <%= simple_format(h(comment.body)) %>
+    </div>
+
+    <div class="comment-interactions">
+      <%= render "likes/comment_like_button", comment: comment %>
+      <% if current_user %>
+        <% active_reply = defined?(@reply_target) && @reply_target == comment %>
+        <% reply_form_comment = active_reply ? @reply_comment : Comment.new(parent: comment) %>
+        <details class="comment-reply" <%= "open" if active_reply %>>
+          <summary class="comment-reply-toggle">
+            <span aria-hidden="true" class="comment-reply-icon">▶</span>
+            Reply
+          </summary>
+          <div class="comment-reply-body">
+            <%= render "comments/form", post: post, comment: reply_form_comment %>
+          </div>
+        </details>
+      <% end %>
+    </div>
+  </div>
+
+  <% if comment.replies.any? %>
+    <div class="comment-children">
+      <%= render partial: "comments/comment",
+                 collection: comment.replies.order(created_at: :asc),
+                 as: :comment,
+                 locals: { post: post, depth: depth + 1 } %>
+    </div>
+  <% end %>
+</article>

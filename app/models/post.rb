@@ -2,6 +2,7 @@ class Post < ApplicationRecord
   belongs_to :user
   has_many :likes, as: :likeable, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :root_comments, -> { roots }, class_name: "Comment"
   validates :title, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }, length: { minimum: 3, maximum: 150 }
   validates :body, presence: true, length: { minimum: 10 }
   enum :status, { draft: "draft", published: "published" }

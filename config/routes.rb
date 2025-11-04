@@ -18,6 +18,9 @@ Rails.application.routes.draw do
     end
     resources :comments, only: [ :create, :destroy ], shallow: true
   end
+  resources :comments, only: [] do
+    resources :likes, only: [ :create, :destroy ]
+  end
 
   resources :users
   resource  :session, only: [ :new, :create, :destroy ]

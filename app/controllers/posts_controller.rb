@@ -31,6 +31,7 @@ class PostsController < ApplicationController
 
   # GET /posts/1 or /posts/1.json
   def show
+    load_comment_resources
   end
 
   # GET /posts/new
@@ -88,5 +89,12 @@ class PostsController < ApplicationController
       attrs["status"] == "published"? attrs["published_at"] ||= Time.current : attrs["published_at"] = nil
 
       attrs
+    end
+
+    def load_comment_resources
+      @new_comment ||= Comment.new
+      @reply_comment ||= Comment.new
+      @reply_target ||= nil
+      @comments = @post.comments.includes(:user, :likes, replies: [ :user, :likes ]).roots.order(created_at: :asc)
     end
 end

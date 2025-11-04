@@ -4,6 +4,8 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @post = posts(:one)
     @user = users(:one)
+    @other_user = users(:two)
+    @existing_comment = comments(:one)
   end
 
   test "requires login for create" do
@@ -25,11 +27,34 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @post, comment.post
   end
 
+  test "creates reply for signed-in user" do
+    log_in_as(@other_user)
+
+    assert_difference("Comment.count", 1) do
+      post post_comments_path(@post), params: { comment: { body: "I agree!", parent_id: @existing_comment.id } }
+    end
+
+    reply = Comment.order(:created_at).last
+    assert_equal @other_user, reply.user
+    assert_equal @post, reply.post
+    assert_equal @existing_comment, reply.parent
+  end
+
   test "does not create invalid comment" do
     log_in_as(@user)
 
     assert_no_difference("Comment.count") do
       post post_comments_path(@post), params: { comment: { body: "" } }
+    end
+
+    assert_response :unprocessable_entity
+  end
+
+  test "does not create invalid reply" do
+    log_in_as(@user)
+
+    assert_no_difference("Comment.count") do
+      post post_comments_path(@post), params: { comment: { body: "", parent_id: @existing_comment.id } }
     end
 
     assert_response :unprocessable_entity

@@ -4,6 +4,7 @@ class LikesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @post = posts(:one)
     @user = users(:one)
+    @comment = comments(:reply_to_one)
   end
 
   test "should require login for create" do
@@ -41,5 +42,34 @@ class LikesControllerTest < ActionDispatch::IntegrationTest
     delete post_like_path(@post, like)
 
     assert_redirected_to login_path
+  end
+
+  test "requires login for comment like" do
+    post comment_likes_path(@comment)
+
+    assert_redirected_to login_path
+  end
+
+  test "creates like for comment" do
+    log_in_as(@user)
+
+    assert_difference("Like.count", 1) do
+      post comment_likes_path(@comment)
+    end
+
+    assert_redirected_to post_path(@comment.post)
+    assert_equal @user, @comment.reload.likes.order(:created_at).last.user
+  end
+
+  test "removes like from comment" do
+    log_in_as(@user)
+    like = @comment.likes.create!(user: @user)
+
+    assert_difference("Like.count", -1) do
+      delete comment_like_path(@comment, like)
+    end
+
+    assert_redirected_to post_path(@comment.post)
+    assert_raises(ActiveRecord::RecordNotFound) { like.reload }
   end
 end

@@ -1,5 +1,5 @@
 @import "tailwindcss";
 
-@import "./layout.scss";
-@import "./posts.scss";
-@import "./users.scss";
+@import "./layout.tailwind.css";
+@import "./posts.tailwind.css";
+@import "./users.tailwind.css";
