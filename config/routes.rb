@@ -22,7 +22,9 @@ Rails.application.routes.draw do
     resources :likes, only: [ :create, :destroy ]
   end
 
-  resources :users
+  resources :users do
+    resource :follow, only: [ :create, :destroy ]
+  end
   resource  :session, only: [ :new, :create, :destroy ]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

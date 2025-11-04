@@ -72,4 +72,15 @@ class LikesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to post_path(@comment.post)
     assert_raises(ActiveRecord::RecordNotFound) { like.reload }
   end
+
+  test "does not allow liking draft" do
+    log_in_as(@user)
+    draft = posts(:draft)
+
+    assert_no_difference("Like.count") do
+      post post_likes_path(draft)
+    end
+
+    assert_redirected_to posts_path
+  end
 end

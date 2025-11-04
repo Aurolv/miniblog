@@ -24,12 +24,20 @@
               <% can_manage = defined?(owns?) ? owns?(post) : (current_user && (post.user_id == current_user.id || current_user.admin?)) %>
               <% if can_manage %>
                 <%= link_to "Edit", edit_post_path(post), class: "btn-edit" %>
-                <%= button_to "Destroy", post, method: :delete,
-                      class: "btn-destroy",
-                      data: { turbo_confirm: "Are you sure?" } %>
+                <% if post.published? %>
+                  <%= button_to "Destroy", post, method: :delete,
+                        class: "btn-destroy",
+                        data: { turbo_confirm: "Are you sure?" } %>
+                <% else %>
+                  <%= button_to "Publish", publish_post_path(post), method: :patch,
+                        class: "btn-primary",
+                        form: { data: { turbo_confirm: "Publish this draft?" } } %>
+                <% end %>
               <% end %>
 
-              <%= render "likes/like_button", post: post %>
+              <% if post.published? %>
+                <%= render "likes/like_button", post: post %>
+              <% end %>
             </div>
           </div>
         </div>

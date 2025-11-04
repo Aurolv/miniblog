@@ -2,6 +2,7 @@ class PostsController < ApplicationController
   before_action :require_login, only: [ :new, :create, :edit, :update, :destroy, :drafts, :publish, :unpublish ]
   before_action :set_post, only: [ :show, :edit, :update, :destroy, :publish, :unpublish ]
   before_action :authorize_owner!, only: [ :edit, :update, :destroy, :publish, :unpublish ]
+  before_action :authorize_view_for_draft!, only: :show
 
   # GET /posts or /posts.json
   def index
@@ -91,10 +92,20 @@ class PostsController < ApplicationController
       attrs
     end
 
-    def load_comment_resources
-      @new_comment ||= Comment.new
-      @reply_comment ||= Comment.new
-      @reply_target ||= nil
-      @comments = @post.comments.includes(:user, :likes, replies: [ :user, :likes ]).roots.order(created_at: :asc)
+  def load_comment_resources
+    return if @post.draft?
+
+    @new_comment ||= Comment.new
+    @reply_comment ||= Comment.new
+    @reply_target ||= nil
+    @comments = @post.comments.includes(:user, :likes, replies: [ :user, :likes ]).roots.order(created_at: :asc)
+  end
+
+    def authorize_view_for_draft!
+      return unless @post.draft?
+
+      unless current_user && current_user.id == @post.user_id
+        redirect_to posts_path, alert: "You cannot access this draft."
+      end
     end
 end

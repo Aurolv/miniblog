@@ -1,0 +1,18 @@
+<% return unless current_user && current_user != user %>
+
+<div class="user-follow-actions">
+  <% if current_user.following?(user) %>
+    <%= button_to user_follow_path(user),
+          method: :delete,
+          class: "btn-outline-danger",
+          data: { turbo_confirm: "Unfollow #{user.name}?" } do %>
+      <span>Unfollow</span>
+    <% end %>
+  <% else %>
+    <%= button_to user_follow_path(user),
+          method: :post,
+          class: "btn-primary" do %>
+      <span>Follow</span>
+    <% end %>
+  <% end %>
+</div>

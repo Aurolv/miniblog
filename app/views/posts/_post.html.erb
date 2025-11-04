@@ -16,7 +16,11 @@
     <%= post.published_at %>
   </div>
   <div>
-    <strong class="block font-medium mb-1">User:</strong>
-    <%= post.user.name %>
+    <strong class="block font-medium mb-1">Author:</strong>
+    <% if post.user %>
+      <%= link_to post.user.name, post.user, class: "text-indigo-600 hover:text-indigo-500" %>
+    <% else %>
+      <span class="text-slate-500">Unknown</span>
+    <% end %>
   </div>
 </div>

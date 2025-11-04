@@ -3,6 +3,8 @@ class LikesController < ApplicationController
   before_action :set_likeable
 
   def create
+    return if performed?
+
     @likeable.likes.find_or_create_by!(user: current_user)
     respond_to do |f|
       f.turbo_stream { render turbo_stream: replace_like_frame(@likeable) }
@@ -11,6 +13,8 @@ class LikesController < ApplicationController
   end
 
   def destroy
+    return if performed?
+
     @likeable.likes.find(params[:id]).destroy
     respond_to do |f|
       f.turbo_stream { render turbo_stream: replace_like_frame(@likeable) }
@@ -29,7 +33,11 @@ class LikesController < ApplicationController
       end
 
     @post = @likeable.is_a?(Post) ? @likeable : @likeable&.post
-    head :not_found unless @likeable
+    return head :not_found unless @likeable
+
+    if @post&.draft?
+      redirect_back fallback_location: posts_path, alert: "Cannot like a draft."
+    end
   end
 
   def require_login

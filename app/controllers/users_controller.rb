@@ -3,10 +3,17 @@ class UsersController < ApplicationController
   before_action :scrub_blank_passwords, only: :update
 
   def index
-    @users = User.all
+    @query = params[:q].to_s.strip
+    scope = User.order(created_at: :desc)
+    scope = scope.where("users.name ILIKE :q OR users.email ILIKE :q", q: "%#{@query}%") if @query.present?
+    @users = scope.limit(50)
   end
 
-  def show; end
+  def show
+    @recent_posts = @user.posts.order(created_at: :desc).limit(5)
+    @recent_comments = @user.comments.includes(:post).order(created_at: :desc).limit(5)
+    @recent_likes = @user.likes.includes(:likeable).order(created_at: :desc).limit(5)
+  end
 
   def new
     @user = User.new

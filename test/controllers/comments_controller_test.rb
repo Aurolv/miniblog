@@ -60,6 +60,17 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "does not allow commenting on drafts" do
+    log_in_as(@user)
+    draft = posts(:draft)
+
+    assert_no_difference("Comment.count") do
+      post post_comments_path(draft), params: { comment: { body: "Draft comment" } }
+    end
+
+    assert_redirected_to post_path(draft)
+  end
+
   test "destroys comment owned by user" do
     log_in_as(@user)
     comment = @post.comments.create!(user: @user, body: "Owned comment")

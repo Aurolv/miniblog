@@ -355,3 +355,22 @@
 .comment-card--root::before {
   @apply hidden;
 }
+.post-author-link { @apply text-indigo-600 hover:text-indigo-500 font-semibold transition; }
+
+.comment-avatar a { @apply flex h-full w-full items-center justify-center; }
+
+.comment-author-link { @apply text-indigo-600 hover:text-indigo-500 transition; }
+.comments-section--draft {
+  @apply mt-10 rounded-3xl border border-dashed border-slate-200 bg-white/70 px-6 py-10 text-center shadow-inner;
+}
+
+.draft-note h2 {
+  @apply text-lg font-semibold text-slate-900;
+}
+
+.draft-note p {
+  @apply mt-2 text-sm text-slate-500;
+}
+.draft-note {
+  @apply space-y-2;
+}

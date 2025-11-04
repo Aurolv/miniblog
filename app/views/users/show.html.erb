@@ -1,11 +1,147 @@
-<% content_for :title, "Showing user" %>
+<% content_for :title, @user.name %>
 
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Showing user</h1>
+<div class="user-profile">
+  <section class="user-profile-header">
+    <div class="user-profile-identity">
+      <div class="user-profile-avatar"><%= (@user.name.presence || @user.email).first.upcase %></div>
+      <div>
+        <h1 class="user-profile-name"><%= @user.name %></h1>
+        <p class="user-profile-email"><%= @user.email %></p>
+        <% if @user.bio.present? %>
+          <div class="user-profile-bio"><%= simple_format(h(@user.bio)) %></div>
+        <% end %>
+      </div>
+    </div>
 
-  <%= render @user %>
+    <div class="user-profile-stats">
+      <div class="user-profile-stat">
+        <span class="user-profile-stat-value"><%= @user.posts.count %></span>
+        <span class="user-profile-stat-label">Posts</span>
+      </div>
+      <div class="user-profile-stat">
+        <span class="user-profile-stat-value"><%= @user.followers.count %></span>
+        <span class="user-profile-stat-label">Followers</span>
+      </div>
+      <div class="user-profile-stat">
+        <span class="user-profile-stat-value"><%= @user.following.count %></span>
+        <span class="user-profile-stat-label">Following</span>
+      </div>
+      <div class="user-profile-stat">
+        <span class="user-profile-stat-value"><%= @user.likes.count %></span>
+        <span class="user-profile-stat-label">Likes Given</span>
+      </div>
+    </div>
 
-  <%= link_to "Edit this user", edit_user_path(@user), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to users", users_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this user", @user, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+    <div class="user-profile-actions">
+      <%= render "users/follow_button", user: @user %>
+      <%= link_to "Edit profile", edit_user_path(@user), class: "btn-secondary" if current_user == @user %>
+      <%= link_to "All users", users_path, class: "btn-outline" %>
+    </div>
+  </section>
+
+  <section class="user-follow-grid">
+    <div class="user-follow-card">
+      <h2>Followers</h2>
+      <% if @user.followers.any? %>
+        <ul class="user-follow-list">
+          <% @user.followers.limit(6).each do |follower| %>
+            <li><%= link_to follower.name, follower %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="user-follow-empty">No followers yet.</p>
+      <% end %>
+    </div>
+
+    <div class="user-follow-card">
+      <h2>Following</h2>
+      <% if @user.following.any? %>
+        <ul class="user-follow-list">
+          <% @user.following.limit(6).each do |person| %>
+            <li><%= link_to person.name, person %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="user-follow-empty">Not following anyone yet.</p>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="user-activity">
+    <div class="user-activity-card">
+      <header>
+        <h2>Recent Posts</h2>
+        <span><%= pluralize(@user.posts.count, "post") %> total</span>
+      </header>
+      <% if @recent_posts.any? %>
+        <ul>
+          <% @recent_posts.each do |post| %>
+            <li>
+              <%= link_to post.title, post %>
+              <span><%= l post.created_at, format: :short %></span>
+              <span class="user-activity-meta"><%= post.status.titleize %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="user-activity-empty">No posts yet.</p>
+      <% end %>
+    </div>
+
+    <div class="user-activity-card">
+      <header>
+        <h2>Recent Comments</h2>
+        <span><%= pluralize(@user.comments.count, "comment") %> total</span>
+      </header>
+      <% if @recent_comments.any? %>
+        <ul>
+          <% @recent_comments.each do |comment| %>
+            <li>
+              <div>
+                <p class="user-activity-body"><%= truncate(comment.body, length: 120) %></p>
+                <span class="user-activity-meta">on <%= link_to comment.post.title, comment.post %></span>
+              </div>
+              <span><%= time_ago_in_words(comment.created_at) %> ago</span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="user-activity-empty">No comments yet.</p>
+      <% end %>
+    </div>
+
+    <div class="user-activity-card">
+      <header>
+        <h2>Recent Likes</h2>
+        <span><%= pluralize(@user.likes.count, "like") %> total</span>
+      </header>
+      <% if @recent_likes.any? %>
+        <ul>
+          <% @recent_likes.each do |like| %>
+            <% likeable = like.likeable %>
+            <li>
+              <% if likeable.is_a?(Post) %>
+                <%= link_to likeable.title, likeable %>
+                <span class="user-activity-meta">Post</span>
+              <% elsif likeable.is_a?(Comment) %>
+                <p class="user-activity-body"><%= truncate(likeable.body, length: 120) %></p>
+                <span class="user-activity-meta">Comment on <%= link_to likeable.post.title, likeable.post %></span>
+              <% else %>
+                <span class="user-activity-meta">Unknown item</span>
+              <% end %>
+              <span><%= time_ago_in_words(like.created_at) %> ago</span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="user-activity-empty">No likes yet.</p>
+      <% end %>
+    </div>
+  </section>
+
+  <% if current_user == @user %>
+    <div class="user-danger-zone">
+      <%= button_to "Delete account", @user, method: :delete, class: "btn-danger", data: { turbo_confirm: "Are you sure you want to delete your account?" } %>
+    </div>
+  <% end %>
 </div>

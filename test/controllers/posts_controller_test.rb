@@ -89,6 +89,15 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_match @draft_post.title, response.body
   end
 
+  test "owner viewing draft sees no reactions" do
+    get post_url(@draft_post)
+
+    assert_response :success
+    refute_includes response.body, "Discussion"
+    refute_includes response.body, "Post comment"
+    assert_includes response.body, "This draft is private"
+  end
+
   test "should publish draft post" do
     assert_changes -> { @draft_post.reload.status }, from: "draft", to: "published" do
       patch publish_post_url(@draft_post)
@@ -105,6 +114,15 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     patch publish_post_url(@post)
 
     assert_response :forbidden
+  end
+
+  test "non owner cannot view draft" do
+    delete logout_path
+    log_in_as(users(:two))
+
+    get post_url(@draft_post)
+
+    assert_redirected_to posts_url
   end
 
   test "should search published posts" do

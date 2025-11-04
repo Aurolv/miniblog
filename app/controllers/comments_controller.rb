@@ -3,6 +3,7 @@ class CommentsController < ApplicationController
   before_action :set_post, only: :create
   before_action :set_comment, only: :destroy
   before_action :authorize_owner!, only: :destroy
+  before_action :ensure_post_published, only: :create
 
   def create
     @comment = @post.comments.new(comment_params.except(:parent_id).merge(user: current_user))
@@ -58,5 +59,11 @@ class CommentsController < ApplicationController
     end
     @reply_comment ||= Comment.new
     @reply_comment.parent ||= @reply_target if @reply_target
+  end
+
+  def ensure_post_published
+    return if @post.published?
+
+    redirect_to @post, alert: "Drafts do not accept comments."
   end
 end

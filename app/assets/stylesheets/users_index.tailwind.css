@@ -1,0 +1,94 @@
+.user-directory {
+  @apply space-y-8;
+}
+
+.user-directory-notice {
+  @apply inline-flex items-center rounded-xl bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700 shadow-sm;
+}
+
+.user-directory-header {
+  @apply flex flex-col gap-4 rounded-3xl bg-white shadow-lg ring-1 ring-slate-100 px-6 py-6 md:flex-row md:items-center md:justify-between;
+}
+
+.user-directory-title {
+  @apply text-3xl font-bold text-slate-900;
+}
+
+.user-directory-subtitle {
+  @apply text-sm text-slate-500 mt-1;
+}
+
+.user-search-panel {
+  @apply rounded-3xl bg-white shadow-md ring-1 ring-slate-100 px-6 py-6 space-y-4;
+}
+
+.user-search-form {
+  @apply grid gap-4 md:grid-cols-[minmax(0,1fr)_auto];
+}
+
+.user-search-field {
+  @apply flex flex-col gap-2;
+}
+
+.user-search-label {
+  @apply text-xs font-semibold uppercase tracking-[0.2em] text-slate-400;
+}
+
+.user-search-input {
+  @apply w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500;
+}
+
+.user-search-actions {
+  @apply flex items-center gap-3;
+}
+
+.user-search-meta {
+  @apply text-xs uppercase tracking-[0.24em] text-slate-400 flex items-center gap-2;
+}
+
+.user-search-query {
+  @apply text-indigo-500;
+}
+
+.user-grid {
+  @apply grid gap-6 md:grid-cols-2 xl:grid-cols-3;
+}
+
+.user-card {
+  @apply flex h-full flex-col gap-6 rounded-3xl bg-white shadow-[0_14px_40px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 px-6 py-6;
+}
+
+.user-card-header {
+  @apply flex items-center gap-4;
+}
+
+.user-card-avatar {
+  @apply flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-lg font-semibold text-indigo-600;
+}
+
+.user-card-name {
+  @apply text-lg font-semibold text-slate-900;
+}
+
+.user-card-name a { @apply text-indigo-600 hover:text-indigo-500 transition; }
+.user-card-email { @apply text-xs uppercase tracking-[0.18em] text-slate-400; }
+
+.user-card-bio { @apply text-sm text-slate-600; }
+.user-card-bio--empty { @apply text-sm italic text-slate-400; }
+
+.user-card-stats {
+  @apply grid grid-cols-3 gap-3 rounded-2xl bg-slate-50/70 p-4 text-center;
+}
+
+.user-card-stat-value { @apply text-xl font-semibold text-slate-900; }
+.user-card-stat-label { @apply text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-slate-400; }
+
+.user-card-actions {
+  @apply flex flex-wrap gap-3;
+}
+
+.user-directory-empty {
+  @apply col-span-full rounded-3xl border border-dashed border-slate-200 bg-white px-8 py-10 text-center text-slate-500 space-y-2;
+}
+
+.user-directory-empty-sub { @apply text-sm text-slate-400; }

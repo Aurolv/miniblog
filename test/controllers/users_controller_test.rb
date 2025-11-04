@@ -66,4 +66,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to users_url
   end
+
+  test "should search users" do
+    get users_url, params: { q: "demo" }
+
+    assert_response :success
+    assert_includes @request.query_string, "q=demo"
+  end
 end
