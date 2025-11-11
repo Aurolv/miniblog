@@ -131,4 +131,12 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match @post.title, response.body
   end
+
+  test "should sort posts" do
+    get posts_url, params: { sort: "popular" }
+    assert_response :success
+
+    get posts_url, params: { sort: "discussed" }
+    assert_response :success
+  end
 end

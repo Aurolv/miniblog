@@ -1,54 +1,64 @@
 <% content_for :title, "Posts" %>
 
-<div class="posts-wrapper">
-  <div class="posts-header">
-    <h1 class="posts-title">Posts</h1>
-
-    <% if logged_in? %>
-      <%= link_to "New post", new_post_path, class: "btn-new-post" %>
-    <% end %>
-  </div>
-
-  <div id="posts" class="grid gap-6">
-    <% if @posts.any? %>
-      <% @posts.each do |post| %>
-        <div class="post-card">
-          <div class="post-card-inner">
-            <div class="flex-1">
-              <%= render post %>
-            </div>
-
-            <div class="post-actions">
-              <%= link_to "Show", post, class: "btn-show" %>
-
-              <% can_manage = defined?(owns?) ? owns?(post) : (current_user && (post.user_id == current_user.id || current_user.admin?)) %>
-              <% if can_manage %>
-                <%= link_to "Edit", edit_post_path(post), class: "btn-edit" %>
-                <% if post.published? %>
-                  <%= button_to "Destroy", post, method: :delete,
-                        class: "btn-destroy",
-                        data: { turbo_confirm: "Are you sure?" } %>
-                <% else %>
-                  <%= button_to "Publish", publish_post_path(post), method: :patch,
-                        class: "btn-primary",
-                        form: { data: { turbo_confirm: "Publish this draft?" } } %>
-                <% end %>
-              <% end %>
-
-              <% if post.published? %>
-                <%= render "likes/like_button", post: post %>
-              <% end %>
-            </div>
-          </div>
-        </div>
+<div class="posts-directory">
+  <header class="posts-directory-hero <%= 'posts-directory-hero--drafts' if @listing_scope == :drafts %>">
+    <div>
+      <% if @listing_scope == :drafts %>
+        <p class="posts-directory-kicker">Draft area</p>
+        <h1 class="posts-directory-title">Only visible to you</h1>
+        <p class="posts-directory-subtitle">Finish, polish, and publish when you're ready.</p>
+      <% else %>
+        <p class="posts-directory-kicker">Latest stories</p>
+        <h1 class="posts-directory-title">Browse inspiring writing</h1>
+        <p class="posts-directory-subtitle">
+          Fresh ideas from authors you follow and the wider community. Dive in or publish your own.
+        </p>
       <% end %>
-    <% else %>
-      <div class="posts-empty">
-        <p class="text-lg font-medium">No posts found.</p>
-        <% if logged_in? %>
-          <%= link_to "Create your first post", new_post_path, class: "btn-first-post" %>
+    </div>
+    <% if logged_in? %>
+      <%= link_to (@listing_scope == :drafts ? "Back to posts" : "New post"),
+            (@listing_scope == :drafts ? posts_path : new_post_path), class: "btn-primary" %>
+    <% end %>
+  </header>
+
+  <% if @listing_scope != :drafts %>
+    <div class="posts-directory-filters">
+      <span>Sort by</span>
+      <div class="posts-sort-options">
+        <% [ ["Latest", "latest"], ["Popular", "popular"], ["Discussed", "discussed"] ].each do |label, value| %>
+          <% active = @sort == value %>
+          <%= link_to label,
+                posts_path(sort: value),
+                class: "posts-sort-chip #{'posts-sort-chip--active' if active}" %>
         <% end %>
       </div>
-    <% end %>
-  </div>
+    </div>
+  <% else %>
+    <div class="drafts-tip">
+      <p class="text-sm text-slate-600">Drafts can't be liked or commented on. Use edit to keep writing, or publish when you're ready.</p>
+    </div>
+  <% end %>
+
+  <% if @posts.any? %>
+    <div class="posts-grid">
+      <%= render @posts %>
+    </div>
+  <% else %>
+    <div class="posts-empty">
+      <div class="posts-empty-icon">📝</div>
+      <h3>No posts yet</h3>
+      <p>
+        <% if @listing_scope == :drafts %>
+          Start writing and save drafts here. Publish when you're ready.
+        <% else %>
+          Be the first to share something inspiring with the community.
+        <% end %>
+      </p>
+      <% if logged_in? %>
+        <%= link_to (@listing_scope == :drafts ? "Create draft" : "Write a post"), new_post_path, class: "btn-primary" %>
+      <% else %>
+        <%= link_to "Log in to post", login_path, class: "btn-primary" %>
+      <% end %>
+    </div>
+  <% end %>
 </div>

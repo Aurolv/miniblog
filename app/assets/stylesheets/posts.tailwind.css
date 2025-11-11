@@ -2,6 +2,54 @@
   @apply w-full rounded-2xl bg-white/70 shadow-lg backdrop-blur-sm p-6;
 }
 
+.posts-directory {
+  @apply space-y-8;
+}
+
+.posts-directory-hero {
+  @apply rounded-3xl bg-white shadow-lg ring-1 ring-slate-100 px-6 py-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between;
+}
+
+.posts-directory-hero--drafts {
+  @apply bg-slate-50 border border-dashed border-slate-200;
+}
+
+.posts-directory-kicker {
+  @apply text-xs font-semibold uppercase tracking-[0.28em] text-indigo-400;
+}
+
+.posts-directory-title {
+  @apply text-3xl font-bold text-slate-900;
+}
+
+.posts-directory-subtitle {
+  @apply text-sm text-slate-500;
+}
+
+.posts-directory-filters {
+  @apply flex flex-wrap items-center justify-between gap-4 bg-white rounded-3xl shadow ring-1 ring-slate-100 px-6 py-4;
+}
+
+.posts-sort-options {
+  @apply flex flex-wrap gap-2;
+}
+
+.posts-sort-chip {
+  @apply inline-flex items-center rounded-full border border-slate-200 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 transition hover:border-indigo-200 hover:text-indigo-500;
+}
+
+.posts-sort-chip--active {
+  @apply border-indigo-300 bg-indigo-50 text-indigo-600;
+}
+
+.drafts-tip {
+  @apply rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-4 shadow-inner;
+}
+
+.posts-grid {
+  @apply grid gap-6 md:grid-cols-2 xl:grid-cols-3;
+}
+
 .posts-header {
   @apply flex justify-between items-center mb-8;
 }
@@ -16,6 +64,69 @@
 
 .post-card {
   @apply rounded-xl border border-slate-200 bg-white/80 shadow-sm hover:shadow-md transition p-6;
+}
+
+.post-preview {
+  @apply flex h-full flex-col gap-5 rounded-3xl bg-white shadow-[0_12px_40px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 px-6 py-6;
+}
+
+.post-preview-header {
+  @apply flex items-start justify-between gap-4;
+}
+
+.post-preview-author {
+  @apply flex items-center gap-4;
+}
+
+.post-preview-avatar {
+  @apply flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-lg font-semibold text-indigo-600;
+}
+
+.post-preview-author-name {
+  @apply text-base font-semibold text-slate-900;
+}
+
+.post-preview-author-name a {
+  @apply text-indigo-600 hover:text-indigo-500 transition;
+}
+
+.post-preview-author-meta {
+  @apply text-xs uppercase tracking-[0.2em] text-slate-400;
+}
+
+.post-status-chip {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.28em];
+}
+
+.post-status-chip--published { @apply bg-emerald-50 text-emerald-600; }
+.post-status-chip--draft { @apply bg-amber-50 text-amber-600; }
+
+.post-preview-body h2 {
+  @apply text-xl font-semibold text-slate-900 mb-2;
+}
+
+.post-preview-body h2 a {
+  @apply hover:text-indigo-500 transition;
+}
+
+.post-preview-body p {
+  @apply text-sm text-slate-600;
+}
+
+.post-preview-footer {
+  @apply flex flex-wrap items-center justify-between gap-4;
+}
+
+.post-preview-stats {
+  @apply flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-slate-400;
+}
+
+.post-preview-stats strong {
+  @apply text-base font-semibold text-slate-900 mr-1;
+}
+
+.post-preview-actions {
+  @apply flex flex-wrap gap-3;
 }
 
 .post-card-inner {
@@ -39,11 +150,19 @@
 }
 
 .posts-empty {
-  @apply flex flex-col items-center justify-center min-h-[50vh] text-slate-500;
+  @apply flex flex-col items-center justify-center min-h-[40vh] rounded-3xl border border-dashed border-slate-200 bg-white px-10 py-12 text-center shadow-inner space-y-4;
 }
 
-.btn-first-post {
-  @apply mt-4 inline-flex items-center rounded-xl bg-indigo-600 px-5 py-2.5 text-white hover:bg-indigo-700 shadow transition;
+.posts-empty-icon {
+  @apply text-4xl;
+}
+
+.posts-empty h3 {
+  @apply text-xl font-semibold text-slate-900;
+}
+
+.posts-empty p {
+  @apply text-sm text-slate-600;
 }
 
 .post-edit-wrapper {
@@ -182,184 +301,125 @@
   @apply font-semibold text-indigo-600 hover:text-indigo-500 transition;
 }
 
-.comment-card {
-  @apply relative grid grid-cols-[3rem_1fr] items-start gap-5 rounded-[26px] border border-slate-200 bg-white px-6 py-6 shadow-[0_12px_34px_rgba(15,23,42,0.07)] transition hover:-translate-y-[2px] hover:shadow-[0_20px_48px_rgba(15,23,42,0.12)];
+.comment-thread {
+  @apply relative;
 }
 
-.comment-card::before {
+.comment-thread--nested {
+  @apply pl-6 md:pl-10 mt-4;
+}
+
+.comment-thread--nested::before {
   content: "";
-  @apply absolute left-[1.5rem] top-0 h-3 w-3 rounded-full border border-slate-200 bg-white;
+  @apply absolute left-3 md:left-5 top-0 bottom-0 border-l border-slate-200/70;
 }
 
-.comment-card--nested {
-  @apply mt-6 ml-10 md:ml-16 bg-white;
-}
-
-.comment-card--nested::before {
-  content: "";
-  position: absolute;
-  left: -2.5rem;
-  top: -1rem;
-  bottom: calc(100% - 1.25rem);
-  @apply border-l border-slate-200/80;
-}
-
-.comment-card--nested::after {
-  content: "";
-  position: absolute;
-  left: -2.5rem;
-  top: 1.25rem;
-  bottom: -1.5rem;
-  @apply border-l border-slate-200/60;
-}
-
-.comment-children {
-  @apply mt-4 space-y-6;
-}
-
-.comment-avatar {
-  @apply flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-lg font-semibold text-indigo-700;
-}
-
-.comment-main {
-  @apply flex flex-col gap-4;
+.comment-bubble {
+  @apply relative rounded-2xl bg-white shadow-[0_12px_32px_rgba(15,23,42,0.08)] ring-1 ring-slate-100 px-5 py-5 space-y-4;
 }
 
 .comment-header {
-  @apply flex flex-wrap items-center justify-between gap-4;
+  @apply flex items-start justify-between gap-4;
 }
 
-.comment-meta {
-  @apply flex items-center gap-2 text-sm font-medium text-slate-500;
+.comment-user {
+  @apply flex items-center gap-4;
 }
 
-.comment-author {
-  @apply text-base font-semibold text-slate-800;
-}
-
-.comment-dot {
-  @apply h-1.5 w-1.5 rounded-full bg-slate-300;
-}
-
-.comment-meta {
-  @apply flex flex-wrap items-center gap-2 text-sm font-medium text-slate-400;
+.comment-avatar {
+  @apply flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-200;
 }
 
 .comment-author {
-  @apply text-base font-semibold text-slate-800;
-}
-
-.comment-dot {
-  @apply h-1 w-1 rounded-full bg-slate-300;
+  @apply text-sm font-semibold text-slate-900;
 }
 
 .comment-timestamp {
-  @apply text-[0.65rem] font-semibold tracking-[0.28em] text-slate-400;
-}
-
-.comment-delete-button {
-  @apply inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white px-4 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-rose-500 transition hover:bg-rose-50 hover:text-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200;
+  @apply text-xs uppercase tracking-[0.24em] text-slate-400;
 }
 
 .comment-body {
   @apply text-sm leading-relaxed text-slate-700;
-
-  p {@apply mb-3;}
-  p:last-child {@apply mb-0;}
 }
 
-.comment-interactions {
-  @apply flex flex-wrap items-center gap-3 text-sm;
+.comment-footer {
+  @apply flex flex-wrap items-center gap-4 text-sm;
 }
 
 .comment-like-button {
-  @apply inline-flex items-center gap-1 rounded-full border border-slate-300 bg-white px-4 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-200;
-}
-
-.comment-like-button svg {
-  @apply transition;
+  @apply inline-flex items-center gap-1 rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-200;
 }
 
 .comment-like-button--active {
-  @apply border-rose-300 bg-rose-50 text-rose-600 hover:bg-rose-100 focus:ring-rose-200;
-}
-
-.comment-like-count {
-  @apply inline-flex items-center gap-1 text-xs font-medium text-slate-500;
+  @apply border-rose-300 bg-rose-50 text-rose-600;
 }
 
 .comment-reply {
   @apply w-full md:w-auto;
 }
 
+.comment-reply summary {
+  @apply cursor-pointer select-none text-xs font-semibold text-indigo-600 hover:text-indigo-500 transition;
+}
+
 .comment-reply summary::-webkit-details-marker {
   display: none;
 }
 
-.comment-reply-toggle {
-  @apply cursor-pointer select-none text-xs font-semibold text-indigo-600 hover:text-indigo-500 transition;
+.comment-reply-body {
+  @apply mt-3;
 }
 
-.comment-reply-icon {
-  @apply mr-1 text-[0.6rem] align-middle;
-}
-
-.comment-reply[open] .comment-reply-toggle {
-  @apply text-indigo-500;
-}
-
-.comment-reply-body {@apply mt-3 md:mt-4;}
-
-.comment-form-card {
-  @apply rounded-2xl border border-slate-200 bg-slate-50 px-6 py-6 shadow-sm space-y-4;
-}
-
-.comment-form-card--reply {
-  @apply border-none bg-transparent px-0 py-0 shadow-none;
-}
-
-.comment-form-title {
-  @apply text-lg font-semibold text-slate-900;
-}
-
-.comment-form-title--reply {
-  @apply text-xs font-semibold uppercase tracking-[0.2em] text-slate-400;
-}
-
-.comment-errors {
-  @apply rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 space-y-2;
-}
-
-.comment-errors h4 {@apply font-semibold;}
-.comment-errors ul {@apply ml-5 list-disc space-y-1;}
-
-.comment-field {@apply flex flex-col gap-2;}
-
-.comment-label {@apply text-sm font-medium text-slate-700;}
-
-.comment-textarea {
-  @apply w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm text-slate-900 shadow-sm transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500;
-}
-
-.comment-textarea--error {@apply border-rose-300 focus:border-rose-400 focus:ring-rose-200;}
-
-.comment-form-actions {
-  @apply flex justify-end;
-}
-
-.comment-form-actions--reply {@apply justify-start;}
-.comment-card--root {
-  @apply mt-4 first:mt-0;
-}
-
-.comment-card--root::before {
-  @apply hidden;
+.comment-children {
+  @apply mt-4 space-y-4;
 }
 .post-author-link { @apply text-indigo-600 hover:text-indigo-500 font-semibold transition; }
 
 .comment-avatar a { @apply flex h-full w-full items-center justify-center; }
 
 .comment-author-link { @apply text-indigo-600 hover:text-indigo-500 transition; }
+
+.comment-delete-button {
+  @apply inline-flex items-center gap-2 rounded-full border border-rose-200 bg-white/90 px-3 py-1 text-xs font-semibold text-rose-600 shadow-sm transition hover:bg-rose-50 hover:text-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-200;
+}
+
+
+.comment-composer {
+  @apply rounded-2xl border border-slate-200 bg-white px-5 py-5 shadow-sm space-y-4;
+}
+
+.comment-composer--reply {
+  @apply border-dashed w-[30vw];
+}
+
+.comment-composer-heading h3 {
+  @apply text-base font-semibold text-slate-900;
+}
+
+.comment-composer-heading span {
+  @apply text-xs uppercase tracking-[0.2em] text-slate-400;
+}
+
+.comment-composer-field {
+  @apply flex flex-col gap-2;
+}
+
+.comment-composer-input {
+  @apply w-full rounded-xl border border-slate-300 bg-white/90 px-3 py-3 text-sm text-slate-900 shadow-sm transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500;
+}
+
+.comment-composer-actions {
+  @apply flex justify-end mt-4;
+}
+
+.comment-form-actions--reply {
+  @apply justify-start;
+}
+.comment-textarea--error {@apply border-rose-300 focus:border-rose-400 focus:ring-rose-200;}
+
+.like-pill {
+  @apply inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-500 shadow-sm;
+}
 .comments-section--draft {
   @apply mt-10 rounded-3xl border border-dashed border-slate-200 bg-white/70 px-6 py-10 text-center shadow-inner;
 }

@@ -6,11 +6,15 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.published.order(published_at: :desc).page(params[:page]).per(10)
+    @listing_scope = :published
+    @sort = permitted_sort
+    @posts = sorted_posts(Post.published.includes(:user, :likes, :comments))
   end
 
   def drafts
-    @posts = current_user.posts.draft.order(updated_at: :desc).page(params[:page]).per(10)
+    @listing_scope = :drafts
+    @sort = "latest"
+    @posts = current_user.posts.draft.includes(:user, :likes, :comments).order(updated_at: :desc)
     render :index
   end
 
@@ -92,10 +96,10 @@ class PostsController < ApplicationController
       attrs
     end
 
-  def load_comment_resources
-    return if @post.draft?
+    def load_comment_resources
+      return if @post.draft?
 
-    @new_comment ||= Comment.new
+      @new_comment ||= Comment.new
     @reply_comment ||= Comment.new
     @reply_target ||= nil
     @comments = @post.comments.includes(:user, :likes, replies: [ :user, :likes ]).roots.order(created_at: :asc)
@@ -106,6 +110,25 @@ class PostsController < ApplicationController
 
       unless current_user && current_user.id == @post.user_id
         redirect_to posts_path, alert: "You cannot access this draft."
+      end
+    end
+
+    def permitted_sort
+      %w[latest popular discussed].include?(params[:sort]) ? params[:sort] : "latest"
+    end
+
+    def sorted_posts(scope)
+      case @sort
+      when "popular"
+        scope.left_outer_joins(:likes)
+             .group("posts.id")
+             .order(Arel.sql("COUNT(likes.id) DESC, COALESCE(posts.published_at, posts.created_at) DESC"))
+      when "discussed"
+        scope.left_outer_joins(:comments)
+             .group("posts.id")
+             .order(Arel.sql("COUNT(comments.id) DESC, COALESCE(posts.published_at, posts.created_at) DESC"))
+      else
+        scope.order(published_at: :desc, created_at: :desc)
       end
     end
 end

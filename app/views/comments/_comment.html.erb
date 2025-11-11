@@ -1,33 +1,28 @@
 <% depth = local_assigns.fetch(:depth, 0) %>
-<% wrapper_classes = [ "comment-card" ] %>
-<% wrapper_classes << (depth.zero? ? "comment-card--root" : "comment-card--nested") %>
-<% wrapper_classes << "comment-card--has-children" if comment.replies.any? %>
-
-<article id="<%= dom_id(comment) %>" class="<%= wrapper_classes.join(" ") %>">
-  <div class="comment-avatar">
-    <% if comment.user %>
-      <%= link_to comment.user do %>
-        <span><%= comment.user.name&.first&.upcase || comment.user.email&.first&.upcase || "U" %></span>
-      <% end %>
-    <% else %>
-      U
-    <% end %>
-  </div>
-
-  <div class="comment-main">
+<div class="comment-thread <%= depth.positive? ? 'comment-thread--nested' : 'comment-thread--root' %>">
+  <article id="<%= dom_id(comment) %>" class="comment-bubble">
     <header class="comment-header">
-      <div class="comment-meta">
-        <span class="comment-author">
-          <% if comment.user %>
-            <%= link_to(comment.user.name.presence || comment.user.email, comment.user, class: "comment-author-link") %>
-          <% else %>
-            Anonymous
+      <div class="comment-user">
+        <% if comment.user %>
+          <%= link_to comment.user, class: "comment-avatar" do %>
+            <%= (comment.user.name.presence || comment.user.email).first.upcase %>
           <% end %>
-        </span>
-        <span class="comment-dot" aria-hidden="true"></span>
-        <%= time_tag comment.created_at, class: "comment-timestamp", title: l(comment.created_at, format: :long) do %>
-          <%= time_ago_in_words(comment.created_at) %> ago
+        <% else %>
+          <div class="comment-avatar">U</div>
         <% end %>
+
+        <div>
+          <p class="comment-author">
+            <% if comment.user %>
+              <%= link_to(comment.user.name.presence || comment.user.email, comment.user, class: "comment-author-link") %>
+            <% else %>
+              Anonymous
+            <% end %>
+          </p>
+          <p class="comment-timestamp">
+            <%= time_ago_in_words(comment.created_at) %> ago
+          </p>
+        </div>
       </div>
 
       <% if owns?(comment) %>
@@ -47,23 +42,21 @@
       <%= simple_format(h(comment.body)) %>
     </div>
 
-    <div class="comment-interactions">
+    <footer class="comment-footer">
       <%= render "likes/comment_like_button", comment: comment %>
+
       <% if current_user %>
         <% active_reply = defined?(@reply_target) && @reply_target == comment %>
         <% reply_form_comment = active_reply ? @reply_comment : Comment.new(parent: comment) %>
         <details class="comment-reply" <%= "open" if active_reply %>>
-          <summary class="comment-reply-toggle">
-            <span aria-hidden="true" class="comment-reply-icon">▶</span>
-            Reply
-          </summary>
+          <summary>Reply</summary>
           <div class="comment-reply-body">
             <%= render "comments/form", post: post, comment: reply_form_comment %>
           </div>
         </details>
       <% end %>
-    </div>
-  </div>
+    </footer>
+  </article>
 
   <% if comment.replies.any? %>
     <div class="comment-children">
@@ -73,4 +66,4 @@
                  locals: { post: post, depth: depth + 1 } %>
     </div>
   <% end %>
-</article>
+</div>

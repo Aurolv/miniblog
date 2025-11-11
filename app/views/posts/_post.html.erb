@@ -1,26 +1,49 @@
-<div id="<%= dom_id post %>" class="w-full sm:w-auto my-5 space-y-5">
-  <div>
-    <strong class="block font-medium mb-1">Title:</strong>
-    <%= post.title %>
+<article id="<%= dom_id(post) %>" class="post-preview">
+  <header class="post-preview-header">
+    <div class="post-preview-author">
+      <% if post.user %>
+        <%= link_to post.user do %>
+          <div class="post-preview-avatar"><%= (post.user.name.presence || post.user.email).first.upcase %></div>
+        <% end %>
+        <div>
+          <p class="post-preview-author-name"><%= link_to(post.user.name, post.user) %></p>
+          <p class="post-preview-author-meta">
+            <%= post.published? ? l(post.published_at || post.created_at, format: :short) : "Draft" %>
+          </p>
+        </div>
+      <% else %>
+        <div class="post-preview-avatar">U</div>
+        <div>
+          <p class="post-preview-author-name">Unknown author</p>
+          <p class="post-preview-author-meta"><%= l(post.created_at, format: :short) %></p>
+        </div>
+      <% end %>
+    </div>
+
+    <span class="post-status-chip <%= post.published? ? "post-status-chip--published" : "post-status-chip--draft" %>">
+      <%= post.status.capitalize %>
+    </span>
+  </header>
+
+  <div class="post-preview-body">
+    <h2><%= link_to post.title, post %></h2>
+    <p><%= truncate(post.body, length: 180) %></p>
   </div>
-  <div>
-    <strong class="block font-medium mb-1">Body:</strong>
-    <%= post.body %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Status:</strong>
-    <%= post.status %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Published at:</strong>
-    <%= post.published_at %>
-  </div>
-  <div>
-    <strong class="block font-medium mb-1">Author:</strong>
-    <% if post.user %>
-      <%= link_to post.user.name, post.user, class: "text-indigo-600 hover:text-indigo-500" %>
-    <% else %>
-      <span class="text-slate-500">Unknown</span>
-    <% end %>
-  </div>
-</div>
+
+  <footer class="post-preview-footer">
+    <div class="post-preview-stats">
+      <span><strong><%= post.comments.count %></strong> comments</span>
+      <span><strong><%= post.likes.count %></strong> likes</span>
+    </div>
+    <div class="post-preview-actions">
+      <%= link_to "Read", post, class: "btn-secondary" %>
+      <% if current_user && current_user.id == post.user_id %>
+        <%= link_to "Edit", edit_post_path(post), class: "btn-outline" %>
+        <% unless post.published? %>
+          <%= button_to "Publish", publish_post_path(post), method: :patch, class: "btn-primary",
+                form: { data: { turbo_confirm: "Publish this draft?" } } %>
+        <% end %>
+      <% end %>
+    </div>
+  </footer>
+</article>

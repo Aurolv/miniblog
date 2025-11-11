@@ -1,13 +1,18 @@
 <% parent_id = comment.parent_id || comment.parent&.id %>
 <% is_reply = parent_id.present? %>
-<div class="comment-form-card <%= "comment-form-card--reply" if is_reply %>">
-  <h3 class="comment-form-title <%= "comment-form-title--reply" if is_reply %>">
-    <%= is_reply ? "Reply" : "Add a comment" %>
-  </h3>
+<div class="comment-composer <%= "comment-composer--reply" if is_reply %>">
+  <div class="comment-composer-heading">
+    <h3><%= is_reply ? "Reply" : "Share your thoughts" %></h3>
+    <% if is_reply %>
+      <span>Respond to <%= comment.parent&.user&.name || "the thread" %></span>
+    <% else %>
+      <span>Join the discussion</span>
+    <% end %>
+  </div>
 
   <% if comment.errors.any? %>
     <div class="comment-errors">
-      <h4><%= pluralize(comment.errors.count, "error") %> prevented this comment from being saved:</h4>
+      <h4><%= pluralize(comment.errors.count, "error") %> prevented saving:</h4>
       <ul>
         <% comment.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -20,15 +25,15 @@
     <% if parent_id.present? %>
       <%= form.hidden_field :parent_id, value: parent_id %>
     <% end %>
-    <div class="comment-field">
-      <%= form.label :body, (is_reply ? "Share your reply" : "Share your thoughts"), class: "comment-label" %>
+
+    <div class="comment-composer-field">
       <%= form.text_area :body,
             rows: (is_reply ? 3 : 4),
-            placeholder: "Write something meaningful...",
-            class: "comment-textarea#{' comment-textarea--error' if comment.errors[:body].present?}" %>
+            placeholder: is_reply ? "Write a thoughtful reply…" : "What stood out to you?",
+            class: "comment-composer-input#{' comment-textarea--error' if comment.errors[:body].present?}" %>
     </div>
 
-    <div class="comment-form-actions <%= "comment-form-actions--reply" if is_reply %>">
+    <div class="comment-composer-actions <%= "comment-form-actions--reply" if is_reply %>">
       <%= form.submit (is_reply ? "Reply" : "Post comment"), class: "btn-primary" %>
     </div>
   <% end %>
