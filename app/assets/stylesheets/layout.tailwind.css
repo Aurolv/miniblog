@@ -7,53 +7,62 @@
 }
 
 .site-header {
-  @apply fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200;
+  @apply fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200/60;
 }
 
-.nav-container {
-  @apply mx-auto max-w-5xl h-14 px-4 sm:px-6 lg:px-8 flex items-center justify-between;
+.nav-shell {
+  @apply mx-auto max-w-6xl h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6;
 }
 
-.nav-left {
-  @apply flex items-center gap-4;
+.nav-brand {
+  @apply flex items-center gap-2;
 }
 
-.brand-link {
-  @apply text-2xl font-semibold tracking-tight text-slate-900 hover:text-indigo-600;
+.nav-brand-title {
+  @apply text-2xl font-bold tracking-tight text-slate-900 hover:text-indigo-600;
 }
 
-.nav-link {
-  @apply text-lg text-slate-600 hover:text-slate-900 relative
-         after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0
-         hover:after:w-full after:bg-indigo-600 after:transition-all;
+.nav-badge {
+  @apply rounded-full bg-indigo-100 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-indigo-600;
 }
 
-.nav-link-active {
-  @apply text-lg font-medium text-indigo-700 relative hover:text-indigo-800
-         after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0
-         hover:after:w-full after:bg-indigo-600 after:transition-all;
+.nav-links {
+  @apply hidden md:flex items-center gap-2 flex-1;
 }
 
-.nav-right {
+.nav-pill {
+  @apply inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition;
+}
+
+.nav-cta {
+  @apply inline-flex items-center rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-700 transition;
+}
+
+.nav-actions {
   @apply flex items-center gap-3;
 }
 
-.user-email {
-  @apply hidden sm:inline text-sm text-slate-600;
+.user-chip {
+  @apply hidden sm:flex items-center gap-3 rounded-2xl bg-slate-100 px-3 py-2 shadow-inner border border-slate-200;
 }
 
+.user-chip-avatar {
+  @apply flex h-9 w-9 items-center justify-center rounded-full bg-indigo-200 text-indigo-700 font-semibold;
+}
+
+.user-chip-name { @apply text-sm font-semibold text-slate-900 leading-tight; }
+.user-chip-email { @apply text-[0.7rem] uppercase tracking-[0.2em] text-slate-400; }
+
 .btn-logout {
-  @apply inline-flex items-center rounded-xl bg-slate-900 px-3 py-1.5
-         text-sm font-medium text-white hover:bg-slate-800 transition;
+  @apply inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 transition;
 }
 
 .btn-login {
-  @apply inline-flex items-center rounded-xl bg-indigo-600 px-3 py-1.5
-         text-sm font-medium text-white hover:bg-indigo-700 transition;
+  @apply inline-flex items-center rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition;
 }
 
 .flash-container {
-  @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 mt-16;
+  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-20;
 }
 
 .flash-message {
@@ -73,13 +82,18 @@
 }
 
 .main-content {
-  @apply mx-56 px-4 sm:px-6 lg:px-8 py-8;
+  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10;
 }
 
 .site-footer {
-  @apply border-t border-slate-200 bg-white/60 backdrop-blur;
+  @apply border-t border-slate-200 bg-white/80 backdrop-blur;
 }
 
 .footer-container {
-  @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between text-xs text-slate-500;
+  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-8 grid gap-4 md:grid-cols-2 items-center text-sm text-slate-500;
 }
+
+.footer-brand { @apply space-y-2; }
+.footer-title { @apply text-lg font-semibold text-slate-900; }
+.footer-subtitle { @apply text-sm text-slate-500; }
+.footer-meta { @apply flex flex-col sm:flex-row sm:items-center sm:justify-end gap-1 text-xs uppercase tracking-[0.2em]; }

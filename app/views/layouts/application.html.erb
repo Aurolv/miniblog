@@ -21,25 +21,39 @@
     <div class="background-gradient"></div>
 
     <header class="site-header">
-      <nav class="nav-container">
-        <div class="nav-left">
-          <%= link_to "Miniblog", root_path, class: "brand-link" %>
-          <%= link_to "Posts", posts_path, class: "nav-link" %>
-          <% if logged_in? %>
-            <%= link_to "Drafts", drafts_posts_path, class: "nav-link" %>
-            <%= link_to "New post", new_post_path, class: "nav-link-active" %>
+      <div class="nav-shell">
+        <div class="nav-brand">
+          <%= link_to root_path, class: "nav-brand-title" do %>
+            Miniblog
           <% end %>
         </div>
 
-        <div class="nav-right">
+        <nav class="nav-links" aria-label="Primary">
+          <%= link_to "Posts", posts_path, class: "nav-pill" %>
           <% if logged_in? %>
-            <span class="user-email"><%= current_user.email %></span>
+            <%= link_to "Drafts", drafts_posts_path, class: "nav-pill" %>
+          <% end %>
+          <%= link_to "Browse users", users_path, class: "nav-pill" %>
+          <% if logged_in? %>
+            <%= link_to "New post", new_post_path, class: "nav-cta" %>
+          <% end %>
+        </nav>
+
+        <div class="nav-actions">
+          <% if logged_in? %>
+            <div class="user-chip">
+              <div class="user-chip-avatar"><%= (current_user.name.presence || current_user.email).first.upcase %></div>
+              <div>
+                <p class="user-chip-name"><%= current_user.name %></p>
+                <p class="user-chip-email"><%= current_user.email %></p>
+              </div>
+            </div>
             <%= button_to "Log out", logout_path, method: :delete, class: "btn-logout" %>
           <% else %>
             <%= link_to "Log in", login_path, class: "btn-login" %>
           <% end %>
         </div>
-      </nav>
+      </div>
     </header>
 
     <div class="flash-container">
@@ -58,8 +72,14 @@
 
     <footer class="site-footer">
       <div class="footer-container">
-        <span>© <%= Time.current.year %> Miniblog</span>
-        <span>Built with Rails • Hotwire • Tailwind</span>
+        <div class="footer-brand">
+          <span class="footer-title">Miniblog</span>
+          <p class="footer-subtitle">A cozy place to draft, share, and discuss ideas.</p>
+        </div>
+        <div class="footer-meta">
+          <span>© <%= Time.current.year %> Miniblog</span>
+          <span>Rails • Hotwire • Tailwind</span>
+        </div>
       </div>
     </footer>
   </body>
