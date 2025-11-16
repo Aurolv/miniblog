@@ -32,6 +32,12 @@
       <%= simple_format(h(@post.body)) %>
     </div>
 
+    <% if @post.image.attached? %>
+      <div class="post-figure mb-5">
+        <%= image_tag url_for(@post.image), class: "post-imag", alt: @post.title %>
+      </div>
+    <% end %>
+
     <div class="post-actions">
       <% if @post.published? %>
         <%= render "likes/like_button", post: @post %>

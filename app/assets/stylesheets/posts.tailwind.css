@@ -109,6 +109,15 @@
   @apply hover:text-indigo-500 transition;
 }
 
+.post-preview-cover {
+  @apply relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-slate-100 shadow-sm;
+  padding-top: 56%;
+}
+
+.post-preview-cover .post-preview-image {
+  @apply absolute inset-0 h-full w-full object-cover transition duration-300 hover:scale-[1.02];
+}
+
 .post-preview-body p {
   @apply text-sm text-slate-600;
 }
@@ -200,6 +209,55 @@
   @apply border-rose-300;
 }
 
+.post-upload {
+  @apply rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-4 shadow-inner space-y-3;
+}
+
+.post-upload-header {
+  @apply flex items-center justify-between gap-3;
+}
+
+.post-hint {
+  @apply text-xs text-slate-500;
+}
+
+.post-upload-preview {
+  @apply overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm;
+}
+
+.post-upload-thumb {
+  @apply w-full object-cover;
+}
+
+.post-upload-meta {
+  @apply px-4 py-2 text-xs text-slate-500 bg-slate-50 border-t border-slate-100;
+}
+
+.post-upload-placeholder {
+  @apply rounded-xl border border-dashed border-slate-200 bg-white/70 px-4 py-3 text-center;
+}
+
+.post-placeholder-text {
+  @apply text-xs text-slate-500;
+}
+
+.post-upload-actions {
+  @apply flex items-center gap-3;
+}
+
+.post-file-trigger {
+  @apply inline-flex items-center gap-2 rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-600
+         hover:bg-indigo-100 hover:border-indigo-300 transition cursor-pointer;
+}
+
+.post-file-name {
+  @apply text-sm text-slate-500;
+}
+
+.post-file-input {
+  @apply sr-only;
+}
+
 .post-select {
   @apply block w-full rounded-xl border border-slate-300 bg-white/80
          px-3 py-2.5 text-slate-900 shadow-sm
@@ -214,6 +272,18 @@
 
 .post-article {
   @apply rounded-2xl bg-white/80 backdrop-blur-sm shadow-md ring-1 ring-slate-200 p-6 md:p-8;
+}
+
+.post-figure {
+  @apply mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 shadow-lg;
+}
+
+.post-image {
+  @apply w-full h-full object-cover;
+}
+
+.post-image-hint {
+  @apply block px-4 py-2 text-xs uppercase tracking-[0.2em] text-slate-400 border-t border-slate-100 bg-white/70;
 }
 
 .post-title {

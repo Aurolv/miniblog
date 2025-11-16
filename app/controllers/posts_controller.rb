@@ -8,13 +8,13 @@ class PostsController < ApplicationController
   def index
     @listing_scope = :published
     @sort = permitted_sort
-    @posts = sorted_posts(Post.published.includes(:user, :likes, :comments))
+    @posts = sorted_posts(Post.published.with_attached_image.includes(:user, :likes, :comments))
   end
 
   def drafts
     @listing_scope = :drafts
     @sort = "latest"
-    @posts = current_user.posts.draft.includes(:user, :likes, :comments).order(updated_at: :desc)
+    @posts = current_user.posts.draft.with_attached_image.includes(:user, :likes, :comments).order(updated_at: :desc)
     render :index
   end
 
@@ -80,13 +80,13 @@ class PostsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_post = @post = Post.find(params[:id])
+    def set_post = @post = Post.with_attached_image.find(params[:id])
 
     def authorize_owner!; head :forbidden unless @post.user_id == current_user.id; end
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:title, :body, :status)
+      params.require(:post).permit(:title, :body, :status, :image)
     end
 
     def post_params_with_publish_time

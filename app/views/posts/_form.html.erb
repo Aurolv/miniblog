@@ -26,16 +26,53 @@
           placeholder: "Write your story…" %>
   </div>
 
-  <div class="post-field">
-    <%= form.label :status, "Status", class: "post-label" %>
-    <%= form.select :status,
-          options_for_select([["Draft", "draft"], ["Published", "published"]], @post.status),
-          {},
-          class: "post-select" %>
+<div class="post-field">
+  <%= form.label :status, "Status", class: "post-label" %>
+  <%= form.select :status,
+        options_for_select([["Draft", "draft"], ["Published", "published"]], @post.status),
+        {},
+        class: "post-select" %>
+</div>
+
+  <div class="post-field post-upload"
+       data-controller="image-preview"
+       data-image-preview-filename-default-value="file not selected">
+    <div class="post-upload-header">
+      <%= form.label :image, class: "post-label" %>
+      <span class="post-hint">PNG, JPG, or WEBP · up to 8MB</span>
+    </div>
+
+    <% showing_existing = @post.persisted? && @post.image.attached? && @post.image.blob&.persisted? %>
+
+    <div class="post-upload-preview <%= 'hidden' unless showing_existing %>" data-image-preview-target="preview">
+      <% if showing_existing %>
+        <%= image_tag url_for(@post.image), class: "post-upload-thumb", alt: "Current cover", data: { image_preview_target: "image" } %>
+        <div class="post-upload-meta" data-image-preview-target="meta"> current picture: <%= @post.image.filename.to_s %></div>
+      <% else %>
+        <img data-image-preview-target="image" class="post-upload-thumb hidden" alt="Предпросмотр обложки">
+        <div class="post-upload-meta hidden" data-image-preview-target="meta"></div>
+      <% end %>
+    </div>
+
+    <div class="post-upload-placeholder <%= 'hidden' if showing_existing %>" data-image-preview-target="placeholder">
+      <p class="post-placeholder-text">choose an imege to see preview</p>
+    </div>
+
+    <div class="post-upload-actions">
+      <label for="post_image_input" class="post-file-trigger"> Choose file </label>
+      <span class="post-file-name" data-image-preview-target="filename">
+        <%= @post.image.attached? ? @post.image.filename.to_s : "file is not choosen" %>
+      </span>
+    </div>
+    <%= form.file_field :image,
+          accept: "image/png,image/jpeg,image/jpg,image/webp",
+          id: "post_image_input",
+          class: "post-file-input",
+          data: { image_preview_target: "input", action: "change->image-preview#preview" } %>
   </div>
 
-  <div class="post-actions">
-    <%= form.submit (@post.persisted? ? "Save changes" : "Create post"), class: "btn-primary" %>
-    <%= link_to "Cancel", (@post.persisted? ? post_path(@post) : posts_path), class: "btn-secondary" %>
-  </div>
+<div class="post-actions">
+  <%= form.submit (@post.persisted? ? "Save changes" : "Create post"), class: "btn-primary" %>
+  <%= link_to "Cancel", (@post.persisted? ? post_path(@post) : posts_path), class: "btn-secondary" %>
+</div>
 <% end %>

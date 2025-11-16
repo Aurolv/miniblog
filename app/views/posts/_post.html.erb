@@ -25,6 +25,12 @@
     </span>
   </header>
 
+  <% if post.image.attached? %>
+    <div class="post-preview-cover">
+      <%= image_tag url_for(post.image), class: "post-preview-image", alt: post.title %>
+    </div>
+  <% end %>
+
   <div class="post-preview-body">
     <h2><%= link_to post.title, post %></h2>
     <p><%= truncate(post.body, length: 180) %></p>
