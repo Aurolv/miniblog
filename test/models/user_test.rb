@@ -60,7 +60,7 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test "defaults to reader role" do
+  test "defaults to author role" do
     user = User.create!(
       email: "role@example.com",
       password: "password",
@@ -68,6 +68,6 @@ class UserTest < ActiveSupport::TestCase
       name: "RoleUser"
     )
 
-    assert_equal "reader", user.role
+    assert_equal "author", user.role
   end
 end

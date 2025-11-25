@@ -5,10 +5,11 @@ one:
   password_digest: <%= BCrypt::Password.create('password', cost: BCrypt::Engine::MIN_COST) %>
   name: Dave
   bio: MyTextttttt
+  role: 1
 
 two:
   email: editor@example.com
   password_digest: <%= BCrypt::Password.create('password', cost: BCrypt::Engine::MIN_COST) %>
   name: Erin
   bio: Another bio text
-  role: author
+  role: 0

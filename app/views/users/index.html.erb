@@ -11,7 +11,11 @@
       <p class="user-directory-subtitle">Discover writers, commenters, and fellow readers</p>
     </div>
 
-    <%= link_to "Create user", new_user_path, class: "btn-primary" %>
+    <% if current_user&.admin? %>
+      <%= link_to "Create user", new_user_path, class: "btn-primary" %>
+    <% elsif !logged_in? %>
+      <%= link_to "Join the community", new_user_path, class: "btn-outline" %>
+    <% end %>
   </div>
 
   <div class="user-search-panel">
@@ -42,7 +46,10 @@
           <div class="user-card-header">
             <div class="user-card-avatar"><%= (user.name.presence || user.email).first.upcase %></div>
             <div>
-              <h2 class="user-card-name"><%= link_to user.name, user %></h2>
+              <h2 class="user-card-name">
+                <%= link_to user.name, user %>
+                <%= role_badge(user.role) %>
+              </h2>
               <p class="user-card-email"><%= user.email %></p>
             </div>
           </div>
@@ -68,15 +75,22 @@
             </div>
           </div>
 
-          <div class="user-card-actions">
-            <%= link_to "View profile", user, class: "btn-secondary" %>
-            <% if current_user == user %>
-              <%= link_to "Edit profile", edit_user_path(user), class: "btn-outline" %>
-            <% else %>
-              <%= render "users/follow_button", user: user %>
+        <div class="user-card-actions">
+          <%= link_to "View profile", user, class: "btn-secondary" %>
+          <% if current_user == user %>
+            <%= link_to "Edit profile", edit_user_path(user), class: "btn-outline" %>
+          <% end %>
+          <%= render "users/follow_button", user: user %>
+          <% if current_user && (current_user == user || current_user.admin?) %>
+            <%= button_to user,
+                  method: :delete,
+                  class: "btn-danger btn-danger--compact",
+                  data: { turbo_confirm: (current_user == user ? "Delete your account?" : "Delete this user?") } do %>
+              Delete
             <% end %>
-          </div>
-        </article>
+          <% end %>
+        </div>
+      </article>
       <% end %>
     <% else %>
       <div class="user-directory-empty">

@@ -61,6 +61,17 @@
   @apply inline-flex items-center rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition;
 }
 
+.role-badge {
+  @apply inline-flex items-center rounded-full border px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.24em];
+}
+
+.role-badge--author { @apply border-indigo-200 bg-indigo-50 text-indigo-600; }
+.role-badge--admin  { @apply border-rose-200 bg-rose-50 text-rose-600; }
+
+.nav-pill--admin {
+  @apply border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700;
+}
+
 .flash-container {
   @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-20;
 }

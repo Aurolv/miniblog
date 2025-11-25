@@ -40,6 +40,16 @@
           class: user.errors[:bio].any? ? "user-input-error" : "user-input" %>
   </div>
 
+  <% if current_user&.admin? %>
+    <div class="user-form-group">
+      <%= form.label :role %>
+      <%= form.select :role,
+            User.roles.keys.map { |role| [ role.titleize, role ] },
+            {},
+            class: "user-input" %>
+    </div>
+  <% end %>
+
   <div class="inline">
     <%= form.submit class: "user-submit" %>
   </div>

@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :require_login, only: %i[ edit update destroy ]
+  before_action :authorize_profile!, only: %i[ edit update ]
+  before_action :authorize_profile_deletion!, only: :destroy
   before_action :scrub_blank_passwords, only: :update
 
   def index
@@ -62,7 +65,9 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :name, :bio)
+    permitted = [ :email, :password, :password_confirmation, :name, :bio ]
+    permitted << :role if current_user&.admin?
+    params.require(:user).permit(permitted)
   end
 
   def scrub_blank_passwords
@@ -72,5 +77,17 @@ class UsersController < ApplicationController
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
     end
+  end
+
+  def authorize_profile!
+    return if current_user == @user
+
+    redirect_to @user, alert: "You cannot modify this profile."
+  end
+
+  def authorize_profile_deletion!
+    return if current_user == @user || current_user&.admin?
+
+    redirect_to @user, alert: "You cannot delete this profile."
   end
 end

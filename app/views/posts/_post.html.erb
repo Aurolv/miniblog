@@ -19,10 +19,6 @@
         </div>
       <% end %>
     </div>
-
-    <span class="post-status-chip <%= post.published? ? "post-status-chip--published" : "post-status-chip--draft" %>">
-      <%= post.status.capitalize %>
-    </span>
   </header>
 
   <% if post.image.attached? %>
@@ -43,11 +39,17 @@
     </div>
     <div class="post-preview-actions">
       <%= link_to "Read", post, class: "btn-secondary" %>
-      <% if current_user && current_user.id == post.user_id %>
+      <% if current_user && owner?(post) %>
         <%= link_to "Edit", edit_post_path(post), class: "btn-outline" %>
         <% unless post.published? %>
           <%= button_to "Publish", publish_post_path(post), method: :patch, class: "btn-primary",
                 form: { data: { turbo_confirm: "Publish this draft?" } } %>
+        <% end %>
+      <% end %>
+      <% if current_user && owns?(post) %>
+        <%= button_to post_path(post), method: :delete, class: "btn-danger",
+              data: { turbo_confirm: "Delete this post?" } do %>
+          Delete
         <% end %>
       <% end %>
     </div>

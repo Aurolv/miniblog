@@ -34,8 +34,8 @@
             <%= link_to "Drafts", drafts_posts_path, class: "nav-pill" %>
           <% end %>
           <%= link_to "Browse users", users_path, class: "nav-pill" %>
-          <% if logged_in? %>
-            <%= link_to "New post", new_post_path, class: "nav-cta" %>
+          <% if current_user&.admin? %>
+            <%= link_to "Admin", users_path, class: "nav-pill nav-pill--admin" %>
           <% end %>
         </nav>
 
@@ -44,7 +44,12 @@
             <div class="user-chip">
               <div class="user-chip-avatar"><%= (current_user.name.presence || current_user.email).first.upcase %></div>
               <div>
-                <p class="user-chip-name"><%= current_user.name %></p>
+                <p class="user-chip-name">
+                  <%= current_user.name %>
+                  <% if current_user.admin? %>
+                    <%= role_badge(current_user.role) %>
+                  <% end %>
+                </p>
                 <p class="user-chip-email"><%= current_user.email %></p>
               </div>
             </div>

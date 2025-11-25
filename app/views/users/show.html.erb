@@ -5,7 +5,10 @@
     <div class="user-profile-identity">
       <div class="user-profile-avatar"><%= (@user.name.presence || @user.email).first.upcase %></div>
       <div>
-        <h1 class="user-profile-name"><%= @user.name %></h1>
+        <h1 class="user-profile-name">
+          <%= @user.name %>
+          <%= role_badge(@user.role) %>
+        </h1>
         <p class="user-profile-email"><%= @user.email %></p>
         <% if @user.bio.present? %>
           <div class="user-profile-bio"><%= simple_format(h(@user.bio)) %></div>
@@ -34,7 +37,9 @@
 
     <div class="user-profile-actions">
       <%= render "users/follow_button", user: @user %>
-      <%= link_to "Edit profile", edit_user_path(@user), class: "btn-secondary" if current_user == @user %>
+      <% if current_user == @user %>
+        <%= link_to "Edit profile", edit_user_path(@user), class: "btn-secondary" %>
+      <% end %>
       <%= link_to "All users", users_path, class: "btn-outline" %>
     </div>
   </section>
@@ -139,9 +144,10 @@
     </div>
   </section>
 
-  <% if current_user == @user %>
+  <% if current_user && (current_user == @user || current_user.admin?) %>
     <div class="user-danger-zone">
-      <%= button_to "Delete account", @user, method: :delete, class: "btn-danger", data: { turbo_confirm: "Are you sure you want to delete your account?" } %>
+      <% label = current_user == @user ? "Delete account" : "Remove user" %>
+      <%= button_to label, @user, method: :delete, class: "btn-danger", data: { turbo_confirm: "Are you sure? This action cannot be undone." } %>
     </div>
   <% end %>
 </div>

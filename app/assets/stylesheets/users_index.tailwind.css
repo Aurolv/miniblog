@@ -70,6 +70,8 @@
   @apply text-lg font-semibold text-slate-900;
 }
 
+.user-card-name .role-badge { @apply ml-2; }
+
 .user-card-name a { @apply text-indigo-600 hover:text-indigo-500 transition; }
 .user-card-email { @apply text-xs uppercase tracking-[0.18em] text-slate-400; }
 

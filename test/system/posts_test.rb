@@ -42,7 +42,7 @@ class PostsTest < ApplicationSystemTestCase
 
   test "should destroy Post" do
     visit post_url(@post)
-    accept_confirm { click_on "Destroy this post", match: :first }
+    accept_confirm { click_on "Delete", match: :first }
 
     assert_text "Post was successfully destroyed"
   end

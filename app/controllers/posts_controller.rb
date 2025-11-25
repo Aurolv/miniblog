@@ -1,7 +1,8 @@
 class PostsController < ApplicationController
   before_action :require_login, only: [ :new, :create, :edit, :update, :destroy, :drafts, :publish, :unpublish ]
   before_action :set_post, only: [ :show, :edit, :update, :destroy, :publish, :unpublish ]
-  before_action :authorize_owner!, only: [ :edit, :update, :destroy, :publish, :unpublish ]
+  before_action :authorize_owner!, only: [ :edit, :update, :publish, :unpublish ]
+  before_action :authorize_destroyer!, only: :destroy
   before_action :authorize_view_for_draft!, only: :show
 
   # GET /posts or /posts.json
@@ -82,7 +83,13 @@ class PostsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_post = @post = Post.with_attached_image.find(params[:id])
 
-    def authorize_owner!; head :forbidden unless @post.user_id == current_user.id; end
+    def authorize_owner!
+      head :forbidden unless owner?(@post)
+    end
+
+    def authorize_destroyer!
+      head :forbidden unless owns?(@post)
+    end
 
     # Only allow a list of trusted parameters through.
     def post_params
@@ -108,9 +115,9 @@ class PostsController < ApplicationController
     def authorize_view_for_draft!
       return unless @post.draft?
 
-      unless current_user && current_user.id == @post.user_id
-        redirect_to posts_path, alert: "You cannot access this draft."
-      end
+      return if current_user && owns?(@post)
+
+      redirect_to posts_path, alert: "You cannot access this draft."
     end
 
     def permitted_sort
