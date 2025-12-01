@@ -9,7 +9,10 @@ class PostsController < ApplicationController
   def index
     @listing_scope = :published
     @sort = permitted_sort
-    @posts = sorted_posts(Post.published.with_attached_image.includes(:user, :likes, :comments))
+    @feed = permitted_feed
+    scope = Post.published.with_attached_image.includes(:user, :likes, :comments)
+    scope = scope.where(user_id: current_user.following_ids) if @feed == "following"
+    @posts = sorted_posts(scope)
   end
 
   def drafts
@@ -122,6 +125,12 @@ class PostsController < ApplicationController
 
     def permitted_sort
       %w[latest popular discussed].include?(params[:sort]) ? params[:sort] : "latest"
+    end
+
+    def permitted_feed
+      return "all" unless logged_in?
+
+      params[:feed] == "following" ? "following" : "all"
     end
 
     def sorted_posts(scope)

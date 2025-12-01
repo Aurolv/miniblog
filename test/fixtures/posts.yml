@@ -13,3 +13,10 @@ draft:
   status: draft
   published_at:
   user: one
+
+followed:
+  title: Followed Post
+  body: This post belongs to a followed author and is visible in the following feed.
+  status: published
+  published_at: <%= 1.day.ago %>
+  user: two

@@ -139,4 +139,21 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     get posts_url, params: { sort: "discussed" }
     assert_response :success
   end
+
+  test "following feed shows posts from followed authors" do
+    get posts_url, params: { feed: "following" }
+
+    assert_response :success
+    assert_match posts(:followed).title, response.body
+    refute_match posts(:one).title, response.body
+  end
+
+  test "following feed ignored when logged out" do
+    delete logout_path
+
+    get posts_url, params: { feed: "following" }
+
+    assert_response :success
+    assert_match posts(:one).title, response.body
+  end
 end

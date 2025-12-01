@@ -23,15 +23,34 @@
 
   <% if @listing_scope != :drafts %>
     <div class="posts-directory-filters">
-      <span>Sort by</span>
-      <div class="posts-sort-options">
-        <% [ ["Latest", "latest"], ["Popular", "popular"], ["Discussed", "discussed"] ].each do |label, value| %>
-          <% active = @sort == value %>
-          <%= link_to label,
-                posts_path(sort: value),
-                class: "posts-sort-chip #{'posts-sort-chip--active' if active}" %>
-        <% end %>
+      <div class="posts-filter-group">
+        <span>Sort by</span>
+        <div class="posts-sort-options">
+          <% feed_params = (@feed == "following" ? { feed: "following" } : {}) %>
+          <% [ ["Latest", "latest"], ["Popular", "popular"], ["Discussed", "discussed"] ].each do |label, value| %>
+            <% active = @sort == value %>
+            <%= link_to label,
+                  posts_path(feed_params.merge(sort: value)),
+                  class: "posts-sort-chip #{'posts-sort-chip--active' if active}" %>
+          <% end %>
+        </div>
       </div>
+
+      <% if logged_in? %>
+        <div class="posts-filter-group">
+          <span>Show</span>
+          <div class="posts-sort-options posts-feed-options">
+            <% [ ["Everyone", "all"], ["Following", "following"] ].each do |label, value| %>
+              <% active = @feed == value %>
+              <% params_for_link = { sort: @sort }
+                 params_for_link[:feed] = value unless value == "all" %>
+              <%= link_to label,
+                    posts_path(params_for_link),
+                    class: "posts-sort-chip #{'posts-sort-chip--active' if active}" %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </div>
   <% else %>
     <div class="drafts-tip">

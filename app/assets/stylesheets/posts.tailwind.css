@@ -30,6 +30,10 @@
   @apply flex flex-wrap items-center justify-between gap-4 bg-white rounded-3xl shadow ring-1 ring-slate-100 px-6 py-4;
 }
 
+.posts-filter-group {
+  @apply flex flex-col gap-2 min-w-[200px];
+}
+
 .posts-sort-options {
   @apply flex flex-wrap gap-2;
 }

@@ -52,7 +52,8 @@ class PostTest < ActiveSupport::TestCase
   end
 
   test "published scope selects only published posts" do
-    assert_equal [ posts(:one) ], Post.published.to_a
+    expected = [ posts(:one), posts(:followed) ].sort_by(&:id)
+    assert_equal expected, Post.published.order(:id).to_a
   end
 
   test "search matches by title or body regardless of case" do
