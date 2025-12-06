@@ -4,6 +4,9 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :logged_in?, :owns?, :owner?
 
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+  rescue_from StandardError, with: :render_internal_error unless Rails.env.development?
+
   private
 
   def owns?(record)
@@ -34,5 +37,18 @@ class ApplicationController < ActionController::Base
     return if current_user&.admin?
 
     redirect_to root_path, alert: "Admins only."
+  end
+
+  def render_not_found(exception)
+    @error_title = "Not found"
+    @error_message = exception.message
+    render "errors/error_page", status: :not_found, layout: "application"
+  end
+
+  def render_internal_error(exception)
+    Rails.logger.error(exception.full_message)
+    @error_title = "Something went wrong"
+    @error_message = "An unexpected error occurred. Please try again or contact support."
+    render "errors/error_page", status: :internal_server_error, layout: "application"
   end
 end
