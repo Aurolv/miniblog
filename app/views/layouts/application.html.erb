@@ -21,7 +21,7 @@
     <div class="background-gradient"></div>
 
     <header class="site-header">
-      <div class="nav-shell">
+      <div class="nav-shell-desktop">
         <div class="nav-brand">
           <%= link_to root_path, class: "nav-brand-title" do %>
             Miniblog
@@ -41,9 +41,9 @@
 
         <div class="nav-actions">
           <% if logged_in? %>
-            <div class="user-chip">
+            <%= link_to current_user, class: "user-chip" do %>
               <div class="user-chip-avatar"><%= (current_user.name.presence || current_user.email).first.upcase %></div>
-              <div>
+              <div class="min-w-0">
                 <p class="user-chip-name">
                   <%= current_user.name %>
                   <% if current_user.admin? %>
@@ -52,12 +52,52 @@
                 </p>
                 <p class="user-chip-email"><%= current_user.email %></p>
               </div>
-            </div>
+            <% end %>
             <%= button_to "Log out", logout_path, method: :delete, class: "btn-logout" %>
           <% else %>
             <%= link_to "Log in", login_path, class: "btn-login" %>
           <% end %>
         </div>
+      </div>
+
+      <div class="nav-shell-mobile">
+        <div class="mobile-nav-top">
+          <%= link_to "Miniblog", root_path, class: "nav-brand-title" %>
+        </div>
+
+        <% if logged_in? %>
+          <%= link_to current_user, class: "user-chip" do %>
+            <div class="user-chip-avatar"><%= (current_user.name.presence || current_user.email).first.upcase %></div>
+            <div class="min-w-0">
+              <p class="user-chip-name">
+                <%= current_user.name %>
+                <% if current_user.admin? %>
+                  <%= role_badge(current_user.role) %>
+                <% end %>
+              </p>
+              <p class="user-chip-email"><%= current_user.email %></p>
+            </div>
+          <% end %>
+
+          <div class="mobile-nav-actions">
+            <%= button_to "Log out", logout_path, method: :delete, class: "btn-logout" %>
+          </div>
+        <% else %>
+          <div class="mobile-nav-actions">
+            <%= link_to "Log in", login_path, class: "btn-login" %>
+          </div>
+        <% end %>
+
+        <nav class="mobile-nav-links" aria-label="Mobile navigation">
+          <%= link_to "Posts", posts_path, class: "nav-pill" %>
+          <% if logged_in? %>
+            <%= link_to "Drafts", drafts_posts_path, class: "nav-pill" %>
+          <% end %>
+          <%= link_to "Browse users", users_path, class: "nav-pill" %>
+          <% if current_user&.admin? %>
+            <%= link_to "Admin", users_path, class: "nav-pill nav-pill--admin" %>
+          <% end %>
+        </nav>
       </div>
     </header>
 

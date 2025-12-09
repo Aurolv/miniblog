@@ -33,7 +33,11 @@ class LikesController < ApplicationController
       end
 
     @post = @likeable.is_a?(Post) ? @likeable : @likeable&.post
-    head :not_found unless @likeable
+    return head :not_found unless @likeable
+
+    if @post&.draft?
+      redirect_back fallback_location: posts_path, alert: "Cannot like a draft."
+    end
   end
 
   def require_login
