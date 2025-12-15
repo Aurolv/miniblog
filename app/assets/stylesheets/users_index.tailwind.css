@@ -82,8 +82,8 @@
   @apply grid grid-cols-3 gap-3 rounded-2xl bg-slate-50/70 p-4 text-center;
 }
 
-.user-card-stat-value { @apply text-xl font-semibold text-slate-900; }
-.user-card-stat-label { @apply text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-slate-400; }
+.user-card-stat-value { @apply block text-xl font-semibold text-slate-900; }
+.user-card-stat-label { @apply block text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-slate-400; }
 
 .user-card-actions {
   @apply flex flex-wrap gap-3;
