@@ -23,9 +23,6 @@
         <%= l(@post.published_at || @post.created_at, format: :long) %>
       </time>
 
-      <span class="post-status <%= @post.published? ? 'post-status--published' : 'post-status--draft' %>">
-        <%= @post.status.capitalize %>
-      </span>
     </div>
 
     <div class="post-body">

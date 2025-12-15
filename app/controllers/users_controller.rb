@@ -13,7 +13,11 @@ class UsersController < ApplicationController
   end
 
   def show
-    @recent_posts = @user.posts.order(created_at: :desc).limit(5)
+    posts_scope = @user.posts.order(created_at: :desc)
+    unless current_user == @user
+      posts_scope = posts_scope.published
+    end
+    @recent_posts = posts_scope.limit(5)
     @recent_comments = @user.comments.includes(:post).order(created_at: :desc).limit(5)
     @recent_likes = @user.likes.includes(:likeable).order(created_at: :desc).limit(5)
   end
