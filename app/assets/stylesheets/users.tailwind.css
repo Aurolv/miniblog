@@ -35,7 +35,7 @@
 
 .user-profile-stat-value { @apply text-2xl font-bold text-slate-900; }
 
-.user-profile-stat-label { @apply text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase; }
+.user-profile-stat-label { @apply block text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase; }
 
 .user-profile-actions { @apply flex flex-wrap gap-3; }
 
@@ -83,14 +83,10 @@
 .btn-danger { @apply inline-flex items-center justify-center rounded-xl bg-rose-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-300; }
 .btn-danger--compact { @apply px-3 py-2 text-xs uppercase tracking-[0.2em]; }
 
-/* Legacy card styles (for index rendering) */
-.user-card { @apply w-full sm:w-auto my-5 space-y-5; }
-.user-card-field { @apply mb-3; }
-.user-card-label { @apply block font-medium mb-1; }
-
 /* === User new page === */
 .user-new-wrapper { @apply md:w-2/3 w-full mx-auto; }
 .user-new-card { @apply rounded-2xl bg-white/70 backdrop-blur-sm shadow-xl ring-1 ring-slate-200 p-6 md:p-8; }
+.user-edit-card { @apply rounded-2xl bg-white/70 backdrop-blur-sm shadow-xl ring-1 ring-slate-200 p-6 md:p-8; }
 .user-new-title { @apply font-bold text-4xl mb-6; }
 .user-back-link { @apply w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium; }
 .user-follow-actions { @apply flex flex-wrap gap-3; }
