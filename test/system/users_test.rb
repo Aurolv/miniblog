@@ -1,4 +1,5 @@
 require "application_system_test_case"
+require "securerandom"
 
 class UsersTest < ApplicationSystemTestCase
   setup do
@@ -7,41 +8,49 @@ class UsersTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit users_url
-    assert_selector "h1", text: "Users"
+    assert_selector ".user-directory-title", text: "Community"
   end
 
   test "should create user" do
-    visit users_url
-    click_on "New user"
+    visit new_user_url
 
-    fill_in "Bio", with: @user.bio
-    fill_in "Email", with: @user.email
-    fill_in "Name", with: @user.name
-    fill_in "Password digest", with: @user.password_digest
+    fill_in "Email", with: "new_user_#{SecureRandom.hex(4)}@example.com"
+    fill_in "Password", with: "secret123"
+    fill_in "Confirm Password", with: "secret123"
+    fill_in "Name", with: "System Test User"
+    fill_in "Bio", with: "This profile was created by a system test."
     click_on "Create User"
 
-    assert_text "User was successfully created"
-    click_on "Back"
+    assert_text "User was successfully created."
   end
 
-  test "should update User" do
-    visit user_url(@user)
-    click_on "Edit this user", match: :first
+  test "should update user" do
+    sign_in_as(@user)
 
-    fill_in "Bio", with: @user.bio
-    fill_in "Email", with: @user.email
-    fill_in "Name", with: @user.name
-    fill_in "Password digest", with: @user.password_digest
+    visit user_url(@user)
+    click_on "Edit profile"
+
+    fill_in "Name", with: "Updated Display Name"
+    fill_in "Bio", with: "Updated bio from system test."
     click_on "Update User"
 
-    assert_text "User was successfully updated"
-    click_on "Back"
+    assert_text "User was successfully updated."
   end
 
-  test "should destroy User" do
-    visit user_url(@user)
-    accept_confirm { click_on "Delete", match: :first }
+  test "should destroy user" do
+    user = User.create!(
+      email: "system-delete-#{SecureRandom.hex(3)}@example.com",
+      password: "secret123",
+      password_confirmation: "secret123",
+      name: "Disposable User",
+      bio: "Created just for system test deletion."
+    )
 
-    assert_text "User was successfully destroyed"
+    sign_in_as(user, password: "secret123")
+
+    visit user_url(user)
+    accept_confirm { click_on "Delete account" }
+
+    assert_text "User was successfully destroyed."
   end
 end

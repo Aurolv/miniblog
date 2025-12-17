@@ -49,7 +49,7 @@
         <%= image_tag url_for(@post.image), class: "post-upload-thumb", alt: "Current cover", data: { image_preview_target: "image" } %>
         <div class="post-upload-meta" data-image-preview-target="meta"> current picture: <%= @post.image.filename.to_s %></div>
       <% else %>
-        <img data-image-preview-target="image" class="post-upload-thumb hidden" alt="Предпросмотр обложки">
+        <img data-image-preview-target="image" class="post-upload-thumb hidden" alt="Image preview">
         <div class="post-upload-meta hidden" data-image-preview-target="meta"></div>
       <% end %>
     </div>
