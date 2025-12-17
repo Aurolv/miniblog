@@ -7,32 +7,34 @@ class CommentsTest < ApplicationSystemTestCase
   end
 
   test "user interacts with comments on a post" do
-    visit login_path
-    fill_in "Email address", with: @user.email
-    fill_in "Password", with: "password"
-    click_on "Log in"
+    sign_in_as(@user)
 
     visit post_path(@post)
 
-    within ".comment-form-card" do
-      fill_in "Share your thoughts", with: "Lovely insights!"
+    within first(".comment-composer") do
+      fill_in "What stood out to you?", with: "Lovely insights!"
       click_on "Post comment"
     end
 
     assert_text "Lovely insights!"
 
-    within find(".comment-card", text: "Lovely insights!") do
+    comment = find(".comment-bubble", text: "Lovely insights!")
+
+    within comment do
       find(".comment-like-button").click
       assert_selector ".comment-like-button--active"
 
-      click_on "Reply"
-      within first(".comment-form") do
-        fill_in "Share your reply", with: "Thanks for sharing!"
+      reply_section = find("details.comment-reply")
+      reply_section.find("summary", text: "Reply").click
+      within reply_section.find(".comment-composer--reply") do
+        fill_in "Write a thoughtful reply…", with: "Thanks for sharing!"
         click_on "Reply"
       end
+    end
 
-      assert_text "Thanks for sharing!"
+    assert_text "Thanks for sharing!"
 
+    within comment do
       accept_confirm do
         click_on "Remove"
       end

@@ -4,24 +4,25 @@ class FollowsTest < ApplicationSystemTestCase
   setup do
     @follower = users(:one)
     @followed = users(:two)
+    Follow.delete_all
   end
 
   test "user follows and unfollows another user" do
-    visit login_path
-    fill_in "Email address", with: @follower.email
-    fill_in "Password", with: "password"
-    click_on "Log in"
+    sign_in_as(@follower)
 
     visit user_path(@followed)
+    within ".user-follow-actions" do
+      click_on "Follow"
+    end
 
-    assert_button "Follow"
-    click_on "Follow"
+    assert_text "You are now following #{@followed.name}."
 
-    assert_text "You are now following"
-    assert_button "Unfollow"
-
-    click_on "Unfollow"
-    assert_text "You unfollowed"
+    within ".user-follow-actions" do
+      accept_confirm "Unfollow #{@followed.name}?" do
+        click_on "Unfollow"
+      end
+    end
+    assert_text "You unfollowed #{@followed.name}."
     assert_button "Follow"
   end
 end

@@ -3,47 +3,54 @@ require "application_system_test_case"
 class PostsTest < ApplicationSystemTestCase
   setup do
     @post = posts(:one)
+    @user = users(:one)
   end
 
   test "visiting the index" do
     visit posts_url
-    assert_selector "h1", text: "Posts"
+    assert_selector ".posts-directory-title", text: "Browse inspiring writing"
   end
 
   test "should create post" do
+    sign_in_as(@user)
+
     visit posts_url
     click_on "New post"
 
-    fill_in "Body", with: @post.body
-    fill_in "Published at", with: @post.published_at
-    fill_in "Status", with: @post.status
-    fill_in "Title", with: @post.title
-    fill_in "User", with: @post.user_id
-    click_on "Create Post"
+    fill_in "Title", with: "System Test Post"
+    fill_in "Body", with: "This body was written by a system test to ensure posting works."
+    select "Published", from: "Status"
+    click_on "Create post"
 
-    assert_text "Post was successfully created"
-    click_on "Back"
+    assert_text "Post was successfully created."
   end
 
-  test "should update Post" do
+  test "should update post" do
+    sign_in_as(@post.user)
+
     visit post_url(@post)
-    click_on "Edit this post", match: :first
+    click_on "Edit", match: :first
 
-    fill_in "Body", with: @post.body
-    fill_in "Published at", with: @post.published_at.to_s
-    fill_in "Status", with: @post.status
-    fill_in "Title", with: @post.title
-    fill_in "User", with: @post.user_id
-    click_on "Update Post"
+    fill_in "Title", with: "Updated Title from System Test"
+    fill_in "Body", with: "Updated body content from system test."
+    click_on "Save changes"
 
-    assert_text "Post was successfully updated"
-    click_on "Back"
+    assert_text "Post was successfully updated."
   end
 
-  test "should destroy Post" do
-    visit post_url(@post)
-    accept_confirm { click_on "Delete", match: :first }
+  test "should destroy post" do
+    post = @user.posts.create!(
+      title: "Disposable Post",
+      body: "Body created so the system test can delete it safely.",
+      status: :published,
+      published_at: Time.current
+    )
 
-    assert_text "Post was successfully destroyed"
+    sign_in_as(@user)
+
+    visit post_url(post)
+    accept_confirm { click_on "Delete" }
+
+    assert_text "Post was successfully destroyed."
   end
 end
